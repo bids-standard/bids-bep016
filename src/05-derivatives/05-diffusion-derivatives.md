@@ -474,28 +474,28 @@ value of REQUIRED field `SphericalHarmonicBasis`.
       conjugate.
 
    -  Antipodally symmetric: all basis functions with odd degree are
-      assumed zero; `AntipodalSymmetry` MUST NOT be set to True.
+      assumed zero; `AntipodalSymmetry` MUST NOT be set to `True`.
 
    -  Utilised basis functions:
 
-      ![MRtrix3 SH basis functions](https://latex.codecogs.com/gif.latex?Y_{lm}(\theta,\phi)=\begin{Bmatrix}0&\text{if&space;}l\text{&space;is&space;odd},\\\sqrt{2}\text{Im}Y_l^{-m}(\theta,\phi)&\text{if&space;}m<0,\\Y_l^0(\theta,\phi)&\text{if&space;}m=0,\\\sqrt{2}\text{Re}Y_l^m(\theta,\phi)&\text{if&space;}m>0\\\end{Bmatrix})
+      ![MRtrix3 SH basis functions](https://latex.codecogs.com/gif.latex?Y_{lm}(\theta,\phi)=\begin{Bmatrix}0&\text{if&space;}l\text{&space;is&space;odd},\\\sqrt{2}\times\text{Im}\left[Y_l^{-m}(\theta,\phi)\right]&\text{if&space;}m<0,\\Y_l^0(\theta,\phi)&\text{if&space;}m=0,\\\sqrt{2}\times\text{Re}\left[Y_l^m(\theta,\phi)\right]&\text{if&space;}m>0\\\end{Bmatrix})
 
    -  Mapping between image volume *V<sub>lm</sub>* and spherical harmonic basis
       function coefficient *c<sub>lm</sub>*:
 
       *V<sub>lm</sub>* = (*l*(*l*+1) / 2) + *m*
 
-      | ***V<sub>lm</sub>** | ***c<sub>lm</sub>*** |
-      | ------------------- | -------------------- |
-      | 0                   | *l* = 0, *m* = 0     |
-      | 1                   | *l* = 2, *m* = -2    |
-      | 2                   | *l* = 2, *m* = -1    |
-      | 3                   | *l* = 2, *m* = 0     |
-      | 4                   | *l* = 2, *m* = 1     |
-      | 5                   | *l* = 2, *m* = 2     |
-      | 6                   | *l* = 4, *m* = -4    |
-      | 7                   | *l* = 4, *m* = -3    |
-      | ...                 | etc.                 |
+      | ***V<sub>lm</sub>*** | ***c<sub>lm</sub>*** |
+      | -------------------- | -------------------- |
+      | 0                    | *l* = 0, *m* = 0     |
+      | 1                    | *l* = 2, *m* = -2    |
+      | 2                    | *l* = 2, *m* = -1    |
+      | 3                    | *l* = 2, *m* = 0     |
+      | 4                    | *l* = 2, *m* = 1     |
+      | 5                    | *l* = 2, *m* = 2     |
+      | 6                    | *l* = 4, *m* = -4    |
+      | 7                    | *l* = 4, *m* = -3    |
+      | ...                  | etc.                 |
 
    -  Relationship between maximal spherical harmonic degree *l<sub>max</sub>*
       and number of image volumes *N*:
@@ -515,7 +515,7 @@ value of REQUIRED field `SphericalHarmonicBasis`.
 
       | ***l<sub>max</sub>*** |  0  |  2  |  4  |  6  |  8  | ...  |
       | --------------------- | --: | --: | --: | --: | --: | :--: |
-      | ***N***               |   1 |   2 |  3  |  4  |  5  | etc. |
+      | ***N***               |  1  |  2  |  3  |  4  |  5  | etc. |
 
 ## Demonstrative examples
 
