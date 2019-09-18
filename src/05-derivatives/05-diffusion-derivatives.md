@@ -478,7 +478,7 @@ value of REQUIRED field `SphericalHarmonicBasis`.
 
    -  Utilised basis functions:
 
-      ![MRtrix3 SH basis functions](https://latex.codecogs.com/gif.latex?Y_{lm}(\theta,\phi)=\begin{Bmatrix}0&\text{if&space;}l\text{&space;is&space;odd},\\\sqrt{2}\times\text{Im}\left[Y_l^{-m}(\theta,\phi)\right]&\text{if&space;}m<0,\\Y_l^0(\theta,\phi)&\text{if&space;}m=0,\\\sqrt{2}\times\text{Re}\left[Y_l^m(\theta,\phi)\right]&\text{if&space;}m>0\\\end{Bmatrix})
+      ![MRtrix3 SH basis functions](https://latex.codecogs.com/gif.latex?Y_{lm}(\theta,\phi)=\begin{Bmatrix}&space;0&\text{if&space;}l\text{&space;is&space;odd},\\&space;\sqrt{2}\times\text{Im}\left[Y_l^{-m}(\theta,\phi)\right]&\text{if&space;}m<0,\\&space;Y_l^0(\theta,\phi)&\text{if&space;}m=0,\\&space;\sqrt{2}\times\text{Re}\left[Y_l^m(\theta,\phi)\right]&\text{if&space;}m>0\\&space;\end{Bmatrix})
 
    -  Mapping between image volume *V<sub>lm</sub>* and spherical harmonic basis
       function coefficient *c<sub>lm</sub>*:
