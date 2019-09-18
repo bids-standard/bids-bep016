@@ -451,15 +451,15 @@ another.
 
 Basis functions:
 
-![SH basis functions][https://latex.codecogs.com/gif.latex?Y_l^m(\theta,\phi)&space;=&space;\sqrt{\frac{(2l&plus;1)}{4\pi}\frac{(l-m)!}{(l&plus;m)!}}&space;P_l^m(\cos&space;\theta)&space;e^{im\phi}"]
+![SH basis functions](https://latex.codecogs.com/gif.latex?Y_l^m(\theta,\phi)&space;=&space;\sqrt{\frac{(2l&plus;1)}{4\pi}\frac{(l-m)!}{(l&plus;m)!}}&space;P_l^m(\cos&space;\theta)&space;e^{im\phi}")
 
 for integer *order* *l*, *phase* *m*, associated Legendre polynomials *P*.
 
 (Truncated) basis coefficients:
 
-![SH basis coefficients][https://latex.codecogs.com/gif.latex?f(\theta,\phi)&space;=&space;\sum_{l=0}^{l_\text{max}}&space;\sum_{m=-l}^{l}&space;c_l^m&space;Y_l^m(\theta,\phi)"]
+![SH basis coefficients](https://latex.codecogs.com/gif.latex?f(\theta,\phi)&space;=&space;\sum_{l=0}^{l_\text{max}}&space;\sum_{m=-l}^{l}&space;c_l^m&space;Y_l^m(\theta,\phi)")
 
-for *maximum* spherical harmonic order *l<sub>max<\sub>*.
+for *maximum* spherical harmonic order *l<sub>max</sub>*.
 
 -  `MRtrix3`
 
@@ -472,14 +472,14 @@ for *maximum* spherical harmonic order *l<sub>max<\sub>*.
 
    -  Utilised basis functions:
 
-      ![MRtrix3 SH basis functions][https://latex.codecogs.com/gif.latex?Y_{lm}(\theta,\phi)&space;=&space;\begin{Bmatrix}&space;0&space;&&space;\text{if&space;}l\text{&space;is&space;odd},&space;\\&space;\sqrt{2}&space;\:&space;\text{Im}&space;\left[&space;Y_l^{-m}(\theta,\phi)&space;\right]&space;&&space;\text{if&space;}m&space;<&space;0,&space;\\&space;Y_l^0(\theta,\phi)&space;&&space;\text{if&space;}m&space;=&space;0,&space;\\&space;\sqrt{2}&space;\:&space;\text{Re}&space;\left[&space;Y_l^m(\theta,\phi)&space;\right]&space;&&space;\text{if&space;}m&space;>&space;0,&space;\\&space;\end{Bmatrix}]
+      ![MRtrix3 SH basis functions](https://latex.codecogs.com/gif.latex?Y_{lm}(\theta,\phi)&space;=&space;\begin{Bmatrix}&space;0&space;&&space;\text{if&space;}l\text{&space;is&space;odd},&space;\\&space;\sqrt{2}&space;\:&space;\text{Im}&space;\left[&space;Y_l^{-m}(\theta,\phi)&space;\right]&space;&&space;\text{if&space;}m&space;<&space;0,&space;\\&space;Y_l^0(\theta,\phi)&space;&&space;\text{if&space;}m&space;=&space;0,&space;\\&space;\sqrt{2}&space;\:&space;\text{Re}&space;\left[&space;Y_l^m(\theta,\phi)&space;\right]&space;&&space;\text{if&space;}m&space;>&space;0,&space;\\&space;\end{Bmatrix})
 
    -  Mapping between image volume *V<sub>lm</sub>* and spherical harmonic basis
       function coefficient *c<sub>lm</sub>*:
 
-      *V<sub>lm</sub>* = (*l*(*l*+1)) / 2 + *m*
+      *V<sub>lm</sub>* = (*l*(*l*+1) / 2) + *m*
 
-      | ***V<sub>lm</sub>** | ***c<sub>lm<\sub>*** |
+      | ***V<sub>lm</sub>** | ***c<sub>lm</sub>*** |
       | ------------------- | -------------------- |
       | 0                   | *l* = 0, *m* = 0     |
       | 1                   | *l* = 2, *m* = -2    |
