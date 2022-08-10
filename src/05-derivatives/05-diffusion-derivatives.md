@@ -527,7 +527,9 @@ another.
             dwi/
                 sub-01_desc-mean_parameter-bzero_bs.nii.gz
                 sub-01_desc-mean_parameter-dmean_bs.nii.gz
+                sub-01_desc-mean_parameter-dmean_bs.json
                 sub-01_desc-mean_parameter-dstd_bs.nii.gz
+                sub-01_desc-mean_parameter-dstd_bs.json
                 sub-01_desc-mean_parameter-sticks_bs.nii.gz
                 sub-01_desc-mean_parameter-sticks_bs.json
                 sub-01_desc-merged_parameter-sticks_bs.nii.gz
@@ -540,6 +542,16 @@ another.
     Dimensions of NIfTI image "`sub-01_desc-mean_parameter-dstd_bs.nii.gz`": *I*x*J*x*K* ([scalar](#data-scalar))
     Dimensions of NIfTI image "`sub-01_desc-mean_parameter-sticks_bs.nii.gz`": *I*x*J*x*K*x9 ([spherical coordinates](#data-spherical), distance from origin encodes fibre volume fraction)
     Dimensions of NIfTI image "`sub-01_desc-merged_parameter-sticks_bs.nii.gz`": *I*x*J*x*K*x9x50 ([spherical coordinates](#data-spherical), distance from origin encodes fibre volume fraction; 50 bootstrap realisations)
+
+    Contents of JSON files "`sub-01_desc-mean_parameter-dmean_bs.nii.gz`"
+    and "`sub-01_desc-mean_parameter-dstd_bs.nii.gz`" (contents of two
+    files are identical):
+
+    ```JSON
+    {
+        "Units": "mm^2/s"
+    }
+    ```
 
     Contents of JSON files "`sub-01_desc-mean_parameter-sticks_bs.json`"
     and "`sub-01_desc-merged_parameter-sticks_bs.json`" (contents of two
