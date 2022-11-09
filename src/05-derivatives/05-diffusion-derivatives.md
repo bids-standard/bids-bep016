@@ -522,16 +522,16 @@ another.
     my_diffusion_pipeline/
         sub-01/
             dwi/
-                sub-01_model-bs_param-bzero_model.nii.gz
-                sub-01_model-bs_param-bzero_model.json
-                sub-01_model-bs_param-md_mdp.nii.gz
-                sub-01_model-bs_param-md_mdp.json
-                sub-01_model-bs_param-stdd_mdp.nii.gz
-                sub-01_model-bs_param-stdd_mdp.json
-                sub-01_model-bs_param-sticks_mdp.nii.gz
-                sub-01_model-bs_param-sticks_mdp.json
-                sub-01_model-bs_param-sticks_model.nii.gz
-                sub-01_model-bs_param-sticks_model.json
+                sub-01_model-bs_param-bzero_desc-mean_model.nii.gz
+                sub-01_model-bs_param-bzero_desc-mean_model.json
+                sub-01_model-bs_param-md_desc-mean_mdp.nii.gz
+                sub-01_model-bs_param-md_desc-mean_mdp.json
+                sub-01_model-bs_param-stdd_desc-mean_mdp.nii.gz
+                sub-01_model-bs_param-stdd_desc-mean_mdp.json
+                sub-01_model-bs_param-sticks_desc-mean_mdp.nii.gz
+                sub-01_model-bs_param-sticks_desc-mean_mdp.json
+                sub-01_model-bs_param-sticks_desc-merged_model.nii.gz
+                sub-01_model-bs_param-sticks_desc-merged_model.json
                 sub-01_model-bs_model.json
     ```
 
@@ -541,8 +541,18 @@ another.
     Dimensions of NIfTI image "`sub-01_model-bs_param-sticks_mdp.nii.gz`": *I*x*J*x*K*x9 ([spherical coordinates](#data-spherical), distance from origin encodes fibre volume fraction)
     Dimensions of NIfTI image "`sub-01_model-bs_param-sticks_model.nii.gz`": *I*x*J*x*K*x9x50 ([spherical coordinates](#data-spherical), distance from origin encodes fibre volume fraction; 50 bootstrap realisations)
 
-    Contents of JSON files "`sub-01_model-bs_param-sticks_mdp.json`"
-    and "`sub-01_model-bs_param-sticks_model.json`" (contents of two
+    Contents of JSON files "`sub-01_model-bs_param-md_desc-mean_model.json`"
+    and "`sub-01_model-bs_param-stdd_model.json`" (contents of two
+    files are identical):
+
+    ```JSON
+    {
+        "Units": "mm^2/s"
+    }
+    ```
+
+    Contents of JSON files "`sub-01_model-bs_param-sticks_desc-mean_model.json`"
+    and "`sub-01_model-bs_param-sticks_desc-merged_model.json`" (contents of two
     files are identical):
 
     ```JSON
