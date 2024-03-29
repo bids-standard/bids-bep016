@@ -31,7 +31,7 @@ Template:
 
 ## Diffusion models
 
-Diffusion MRI can be modeled using various paradigms to extract more
+Diffusion MRI can be modeled using various approaches to extract more
 informative representations of the diffusion process and the underlying
 biological structure. A wide range of such models are available, each of
 which has its own unique requirements with respect to:
@@ -41,83 +41,81 @@ which has its own unique requirements with respect to:
     empirical image data;
 
 -   The appropriate [data representations](#data-representations) utilized to
-    store information parameterised [by](#paramdef-fit) or
-    [from](#paramdef-derived) the model onto the filesystem;
+    store information about model results in the filesystem;
 
 -   The requirements for encapsulation and complete representation of
     derived [orientation information](#orientation-specification), which is
     a key strength of diffusion MRI but presents unique challenges for
     correct interpretation.
 
-### Parameter terminology
-
-Throughout this document, the term "parameter" is used to refer to
-multiple distinct sources of information. The distinction between
-these uses is defined thus:
-
-1.  <a name="paramdef-input">*Input*</a> parameter:
-
-    Value or non-numerical setting that influences the conformation
-    of the diffusion model to the empirical diffusion-weighted data.
-
-1.  <a name="paramdef-fit">Model *fit*</a> parameter:
-
-    Value that is the direct result of fitting the diffusion model to the
-    empirical diffusion-weighted data.
-
-1.  <a name="paramdef-derived">Model-*derived*</a> parameter:
-
-    Value that can be calculated directly from previously estimated
-    *model parameters*, without necessitating reference to
-    the empirical diffusion-weighted data.
-
-For example, consider a diffusion tensor model fit: the number of
-iterations in the optimization algorithm would be an *input* parameter;
-the six unique diffusion tensor coefficients would be the *model fit*
-parameters; the Fractional Anisotropy (FA) would be a *model-derived*
-parameter (as it is calculated from the diffusion tensor coefficients
-rather than the image data).
 
 ### File names
+
+When a model is specified by the data, parameters of the model can be saved
+using the following conventions:
 
 ```Text
 <pipeline_name>/
     sub-<participant_label>/
         dwi/
-            <source_keywords>[_space-<space>]_model-<label>_param-<param1>_model.nii[.gz]
-            <source_keywords>[_space-<space>]_model-<label>_param-<param1>_model.json
-            <source_keywords>[_space-<space>]_model-<label>_param-<param2>_model.nii[.gz]
-            <source_keywords>[_space-<space>]_model-<label>_param-<param2>_model.json
-            <source_keywords>[_space-<space>]_model-<label>_model.json
-
-            [<source_keywords>[_space-<space>]_model-<label>_param-<parama>_mdp.nii[.gz]]
-            [<source_keywords>[_space-<space>]_model-<label>_param-<parama>_mdp.json]
-            [<source_keywords>[_space-<space>]_model-<label>_param-<paramb>_mdp.nii[.gz]]
-            [<source_keywords>[_space-<space>]_model-<label>_param-<paramb>_mdp.json]
+            <source_keywords>[_space-<space>]_model-<label1>_param-<param1>_dwimap.nii[.gz]
+            <source_keywords>[_space-<space>]_model-<label1>_param-<param2>_dwimap.nii[.gz]
+            <source_keywords>[_space-<space>]_model-<label1>_dwimap.json
+            <source_keywords>[_space-<space>]_model-<label2>_param-<parama>_dwimap.nii[.gz]
+            <source_keywords>[_space-<space>]_model-<label2>_param-<paramb>_dwimap.nii[.gz]
+            <source_keywords>[_space-<space>]_model-<label2>_dwimap.json
 ```
 
--   Files "`<source_keywords>[_space-<space>]_model-<label>_param-<param*>_model.nii[.gz]`"
-    provide data corresponding to the various requisite [model fit parameters](#paramdef-fit).
+- Files "`<source_keywords>[_space-<space>]_model-<label>_param-<param*>_dwimap.nii[.gz]`"
+    provide model outputs and/or parameters of the model.
 
-    In cases where *all* [model fit parameters](#paramdef-fit) are contained within a single image
-    file, entity "`_param-`" MUST NOT be included; e.g.:
-        ```Text
-        <pipeline_name>/
-            sub-<participant_label>/
-                dwi/
-                    <source_keywords>[_space-<space>]_model-<label>_model.nii[.gz]
-                    <source_keywords>[_space-<space>]_model-<label>_model.json
-        ```
+- Only one metadata file, "`<source_keywords>[_space-<space>]_model-<label>_dwimap.json`"
+    is allowed for each set of files that has a specific `model-<label>` entity.
 
--   File "`<source_keywords>[_space-<space>]_model-<label>_model.json`"
-    provides basic model information and [input parameters](#paramdef-input).
+Example:
 
--   OPTIONAL images "`<source_keywords>[_space-<space>]_model-<label>_param-<parama>_mdp.nii[.gz]`"
-    may be defined, in order to provide additional [model-derived parameters](#paramdef-derived).
+```Text
+my_tensors/
+    sub-01/
+        dwi/
+            sub-01_model-DTI_param_Sxx_dwimap.nii.gz
+            sub-01_model-DTI_param_Sxy_dwimap.nii.gz
+            sub-01_model-DTI_param_Sxz_dwimap.nii.gz
+            sub-01_model-DTI_param_Syy_dwimap.nii.gz
+            sub-01_model-DTI_param_Syz_dwimap.nii.gz
+            sub-01_model-DTI_param_Szz_dwimap.nii.gz
+            sub-01_model-DTI_dwimap.json
+            sub-01_model-DTI_param-FA_dwimap.nii.gz
+            sub-01_model-DTI_param-MD_dwimap.nii.gz
 
--   OPTIONAL files "`<source_keywords>[_space-<space>]_model-<label>_param-<param*>_mdp.json`"
-    may be defined to provide information or parameters only relevant to
-    each relevant [model-derived parameter](#paramdef-derived).
+```
+
+In cases where a set of different parameters are contained within a single image
+file, entity "`_param-`" MUST NOT be included; e.g.:
+    ```Text
+    <pipeline_name>/
+        sub-<participant_label>/
+            dwi/
+                <source_keywords>[_space-<space>]_model-<label>_dwimap.nii[.gz]
+                <source_keywords>[_space-<space>]_model-<label>_dwimap.json
+    ```
+
+Example:
+
+```Text
+my_tensors/
+    sub-01/
+        dwi/
+            sub-01_model-DTI_dwimap.nii.gz # Contains the six diffusion tensor components
+            sub-01_model-DTI_dwimap.json
+            sub-01_model-DTI_param-FA_dwimap.nii.gz
+            sub-01_model-DTI_param-MD_dwimap.nii.gz
+            sub-01_model-DKI_dwimap.nii.gz # Contains the fifteen kurtosis tensor components
+            sub-01_model-DKI_dwimap.json
+            sub-01_model-DKI_param-FA_dwimap.nii.gz
+            sub-01_model-DKI_param-MD_dwimap.nii.gz
+```
+
 
 ### Data representations
 
@@ -129,22 +127,21 @@ reading / writing of each representation.
 
 For data that encode orientation information, there are fields that MUST
 be specified in the sidecar JSON file in order to ensure appropriate
-interpretation of that information; see [orientation specification](#orientation-specification)).
+interpretation of that information; see [orientation specification](#orientation-specification).
 
 1.  <a name="data-scalar">*Scalars*</a>:
 
-    Any parameter image (whether [model fit](#paramdef-fit) or
-    [model-derived](#paramdef-derived)) where a solitary numerical value is
-    defined in each 3D image voxel is referred to here as a "scalar" image.
+    Any image where a solitary numerical value is defined in each 3D image
+    voxel is referred to here as a "scalar" image.
 
-1.  <a name="data-dec">*Directionally-Encoded colors (DEC)*</a>:
+2.  <a name="data-dec">*Directionally-Encoded colors (DEC)*</a>:
 
     4D image with three volumes, intended to be interpreted as red, green
     and blue color intensities for visualization
     \[[Pajevic1999](#pajevic1999)\]. Image data MUST NOT contain negative
     values.
 
-1.  <a name="data-spherical">*Spherical coordinates*</a>:
+3.  <a name="data-spherical">*Spherical coordinates*</a>:
 
     4D image where data across volumes within each voxel encode one or
     more discrete orientations using angles on the 2-sphere, optionally
@@ -161,20 +158,22 @@ interpretation of that information; see [orientation specification](#orientation
         1.  Distance from origin; value of embedded parameter MUST be
             indicated in "`_param-*`" entity;
 
-        1.  Inclination / polar angle, in radians, relative to the zenith
+        2.  Inclination / polar angle, in radians, relative to the zenith
             direction being the positive direction of the *third* reference
             axis (see [orientation specification](#orientation-specification));
 
-        1.  Azimuth angle, in radians, orthogonal to the zenith direction,
+        3.  Azimuth angle, in radians, orthogonal to the zenith direction,
             with value of 0.0 corresponding to the *first* reference axis
             (see [orientation specification](#orientation-specification)),
             increasing according to the right-hand rule about the zenith
             direction.
 
         Number of image volumes is equal to (3x*N*), where *N* is the maximum
-        number of discrete orientations in any voxel in the image.
+        number of discrete orientations in any voxel in the image. In voxels
+        in which less than *N* directions are represented, triplets above the
+        number *M* < *N* that are represented are encoded as `[0, 0, 0]`.
 
-    1.  Directions only
+    2.  Directions only
 
         Each consecutive pair of image volumes encodes inclination /
         azimuth pairs, with order & convention identical to that above
@@ -182,9 +181,11 @@ interpretation of that information; see [orientation specification](#orientation
         origin).
 
         Number of image volumes is equal to (2x*N*), where *N* is the maximum
-        number of discrete orientations in any voxel in the image.
+        number of discrete orientations in any voxel in the image. For voxels
+        with less directions, same as above, directions above *M* < *N* would
+        be represented as `[0, 0]`.
 
-1.  <a name="data-3vector">*3-Vectors*</a>:
+4.  <a name="data-3vector">*3-Vectors*</a>:
 
     4D image where data across volumes within each voxel encode one or
     more discrete orientations using triplets of axis dot products.
@@ -198,16 +199,18 @@ interpretation of that information; see [orientation specification](#orientation
         the magnitude of some model or model-derived parameter, the nature of
         which MUST be indicated in the "`_param-*`" entity.
 
-    1.  Directions only
+    2.  Directions only
 
         Each triplet of values encodes an orientation on the unit sphere
         (i.e. the 3-vector data are normalized); no quantitative value is
         associated with each triplet.
 
     Number of image volumes is equal to (3x*N*), where *N* is the maximum
-    number of discrete orientations in any voxel in the image.
+    number of discrete orientations in any voxel in the image. As above,
+    for voxels with less directions, any direction above *M* < *N* would
+    be represented as `[0, 0, 0]`.
 
-1.  <a name="data-sh">*Spherical Harmonics (SH)*</a>:
+5.  <a name="data-sh">*Spherical Harmonics (SH)*</a>:
 
     4D image where data across volumes within each voxel represent a
     continuous function spanning the 2-sphere as coefficient values using a
@@ -217,7 +220,7 @@ interpretation of that information; see [orientation specification](#orientation
     and the maximal spherical harmonic degree *l<sub>max</sub>* (see
     [spherical harmonics bases](#spherical-harmonics-bases)).
 
-1.  <a name="data-amp">*Amplitudes*</a>:
+6.  <a name="data-amp">*Amplitudes*</a>:
 
     4D image where data across volumes within each voxel represent
     amplitudes of a discrete function spanning the 2-sphere.
@@ -227,7 +230,7 @@ interpretation of that information; see [orientation specification](#orientation
     each voxel are provided; these directions MUST themselves be provided
     in the associated sidecar JSON file (see [orientation specification](#orientation-specification)).
 
-1.  <a name="data-param">*Parameter vectors*</a>:
+7.  <a name="data-param">*Parameter vectors*</a>:
 
     4D image containing, for every image voxel, data corresponding to some
     set of model parameters, the names and order of which are defined within
@@ -331,10 +334,10 @@ Reserved keywords for models built into the specification are as follows:
 | `rd`                | Radial Diffusivity (also called perpendicular diffusivity)             | [Scalar](#data-scalar)                       | { `tensor` }           | \mu m<sup>2</sup>.ms<sup>-1</sup> <sup>[1](#diffusivity)</sup> |
 
 While not explicitly included in the table above, *any* [scalar](#data-scalar)
-[model-derived parameter](paramdef-derived) can theoretically be combined
-with a separate source of orientation information from the diffusion model
-in order to produce a [directionally-encoded color](#data-dec),
-[spherical coordinates](#data-spherical) or [3-vectors](#data-3vector) image.
+parameter can theoretically be combined with a separate source of orientation
+information from the diffusion model in order to produce a
+[directionally-encoded color](#data-dec), [spherical
+coordinates](#data-spherical) or [3-vectors](#data-3vector) image.
 
 ### Orientation specification
 
@@ -430,18 +433,18 @@ another.
 -   A basic Diffusion Tensor fit:
 
     ```Text
-    my_diffusion_pipeline/
+    my_tensors/
         sub-01/
             dwi/
-                sub-01_model-tensor_param-tensor_model.nii.gz
-                sub-01_model-tensor_param-bzero_model.nii.gz
-                sub-01_model-tensor_param-fa_mdp.nii.gz
-                sub-01_model-tensor_model.json
+                sub-01_model-DTI_dwimap.nii.gz # Contains the six diffusion tensor components
+                sub-01_model-DTI_dwimap.json
+                sub-01_model-DTI_param-b0_dwimap.nii.gz
+                sub-01_model-DTI_param-FA_dwimap.nii.gz
     ```
 
-    Dimensions of NIfTI image "`sub-01_model-tensor_param-tensor_model.nii.gz`": *I*x*J*x*K*x6 ([parameter vectors](#data-param))
-    Dimensions of NIfTI image "`sub-01_model-tensor_param-bzero_model.nii.gz`": *I*x*J*x*K* ([scalar](#data-scalar))
-    Dimensions of NIfTI image "`sub-01_model-tensor_param-fa_mdp.nii.gz`": *I*x*J*x*K* ([scalar](#data-scalar))
+    Dimensions of NIfTI image "`sub-01_model-DTI_dwimap.nii.gz`": *I*x*J*x*K*x6 ([parameter vectors](#data-param))
+    Dimensions of NIfTI image "`sub-01_model-DTI_param-b0_dwimap.nii.gz`": *I*x*J*x*K* ([scalar](#data-scalar))
+    Dimensions of NIfTI image "`sub-01_model-DTI_param-FA_dwimap.nii.gz`": *I*x*J*x*K* ([scalar](#data-scalar))
 
     Contents of JSON file:
 
@@ -463,20 +466,17 @@ another.
     my_diffusion_pipeline/
         sub-01/
             dwi/
-                sub-01_model-csd_param-wm_model.nii.gz
-                sub-01_model-csd_param-wm_model.json
-                sub-01_model-csd_param-gm_model.nii.gz
-                sub-01_model-csd_param-gm_model.json
-                sub-01_model-csd_param-csf_model.nii.gz
-                sub-01_model-csd_param-csf_model.json
-                sub-01_model-csd_model.json
+                sub-01_model-csd_dwimap.json
+                sub-01_model-csd_param-wm_dwimap.nii.gz
+                sub-01_model-csd_param-gm_dwimap.nii.gz
+                sub-01_model-csd_param-csf_dwimap.nii.gz
     ```
 
-    Dimensions of NIfTI image "`sub-01_model-csd_param-wm_model.nii.gz`": *I*x*J*x*K*x45 ([spherical harmonics](#data-sh))
-    Dimensions of NIfTI image "`sub-01_model-csd_param-gm_model.nii.gz`": *I*x*J*x*K*x1 ([spherical harmonics](#data-sh))
-    Dimensions of NIfTI image "`sub-01_model-csd_param-csf_model.nii.gz`": *I*x*J*x*K*x1 ([spherical harmonics](#data-sh))
+    Dimensions of NIfTI image "`sub-01_model-csd_param-wm_dwimap.nii.gz`": *I*x*J*x*K*x45 ([spherical harmonics](#data-sh))
+    Dimensions of NIfTI image "`sub-01_model-csd_param-gm_dwimap.nii.gz`": *I*x*J*x*K*x1 ([spherical harmonics](#data-sh))
+    Dimensions of NIfTI image "`sub-01_model-csd_param-csf_dwimap.nii.gz`": *I*x*J*x*K*x1 ([spherical harmonics](#data-sh))
 
-    Contents of file "`sub-01_model-csd_model.json`" (common to all [model fit parameters](#paramdef-fit)):
+    Contents of file "`sub-01_model-csd_dwimap.json`" (common to all parameters):
 
     ```JSON
     {
@@ -486,14 +486,8 @@ another.
         "Parameters": {
             "SphericalHarmonicBasis": "MRtrix3",
             "NonNegativityConstraint": "hard"
-        }
-    }
-    ```
-
-    Contents of JSON file "`sub-01_model-csd_param-wm_model.json`":
-
-    ```JSON
-    {
+        },
+        "wm": {
         "OrientationRepresentation": "sh",
         "ReferenceAxes": "xyz",
         "ResponseFunctionZSH": [ [ 600.2 0.0 0.0 0.0 0.0 0.0 ],
@@ -502,13 +496,8 @@ another.
                                  [ 158.3 -98.7 48.4 -17.1 4.5 -1.4 ] ],
         "SphericalHarmonicDegree": 8,
         "Tissue": "White matter"
-    }
-    ```
-
-    Contents of JSON file "`sub-01_model-csd_param_gm_model.json`":
-
-    ```JSON
-    {
+        },
+        "gm": {
         "OrientationRepresentation": "sh",
         "ReferenceAxes": "xyz",
         "ResponseFunctionZSH": [ [ 1041.0 ],
@@ -517,8 +506,14 @@ another.
                                  [ 128.8 ] ],
         "SphericalHarmonicDegree": 0,
         "Tissue": "Gray matter"
+        },
+        "csf":
+        {
+            XXX
+        }
     }
     ```
+
 
 -   An FSL `bedpostx` Ball-And-Sticks fit (including both mean parameters and
     bootstrap realisations):
@@ -527,28 +522,21 @@ another.
     my_diffusion_pipeline/
         sub-01/
             dwi/
-                sub-01_model-bs_param-bzero_model.nii.gz
-                sub-01_model-bs_param-bzero_model.json
-                sub-01_model-bs_param-md_mdp.nii.gz
-                sub-01_model-bs_param-md_mdp.json
-                sub-01_model-bs_param-stdd_mdp.nii.gz
-                sub-01_model-bs_param-stdd_mdp.json
-                sub-01_model-bs_param-sticks_mdp.nii.gz
-                sub-01_model-bs_param-sticks_mdp.json
-                sub-01_model-bs_param-sticks_model.nii.gz
-                sub-01_model-bs_param-sticks_model.json
-                sub-01_model-bs_model.json
+                sub-01_model-bs_dwimap.json
+                sub-01_model-bs_param-bzero_dwimap.nii.gz
+                sub-01_model-bs_param-md_dwimap.nii.gz
+                sub-01_model-bs_param-stdd_dwimap.nii.gz
+                sub-01_model-bs_param-sticks_dwimap.nii.gz
+                sub-01_model-bs_param-sticksboostrap_dwimap.nii.gz
     ```
 
     Dimensions of NIfTI image "`sub-01_model-bs_param-bzero_model.nii.gz`": *I*x*J*x*K* ([scalar](#data-scalar))
-    Dimensions of NIfTI image "`sub-01_model-bs_param-ms_mdp.nii.gz`": *I*x*J*x*K* ([scalar](#data-scalar))
-    Dimensions of NIfTI image "`sub-01_model-bs_param-stdd_mdp.nii.gz`": *I*x*J*x*K* ([scalar](#data-scalar))
-    Dimensions of NIfTI image "`sub-01_model-bs_param-sticks_mdp.nii.gz`": *I*x*J*x*K*x9 ([spherical coordinates](#data-spherical), distance from origin encodes fibre volume fraction)
-    Dimensions of NIfTI image "`sub-01_model-bs_param-sticks_model.nii.gz`": *I*x*J*x*K*x9x50 ([spherical coordinates](#data-spherical), distance from origin encodes fibre volume fraction; 50 bootstrap realisations)
+    Dimensions of NIfTI image "`sub-01_model-bs_param-md_dwimap.nii.gz`": *I*x*J*x*K* ([scalar](#data-scalar))
+    Dimensions of NIfTI image "`sub-01_model-bs_param-stdd_dwimap.nii.gz`": *I*x*J*x*K* ([scalar](#data-scalar))
+    Dimensions of NIfTI image "`sub-01_model-bs_param-sticks_dwimap.nii.gz`": *I*x*J*x*K*x9 ([spherical coordinates](#data-spherical), distance from origin encodes fibre volume fraction)
+    Dimensions of NIfTI image "`sub-01_model-bs_param-sticksboostrap_dwimap.nii.gz`": *I*x*J*x*K*x9x50 ([spherical coordinates](#data-spherical), distance from origin encodes fibre volume fraction; 50 bootstrap realisations)
 
-    Contents of JSON files "`sub-01_model-bs_param-sticks_mdp.json`"
-    and "`sub-01_model-bs_param-sticks_model.json`" (contents of two
-    files are identical):
+    Contents of JSON files "`sub-01_model-bs_param-sticks_dwimap.json`":
 
     ```JSON
     {
@@ -557,7 +545,7 @@ another.
     }
     ```
 
-    Contents of JSON file "`sub-01_model-bs_model.json`":
+    Contents of JSON file "`sub-01_model-bs_dwimap.json`":
 
     ```JSON
     {
