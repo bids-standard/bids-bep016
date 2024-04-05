@@ -159,7 +159,7 @@ interpretation of that information; see [orientation specification](#orientation
         Number of image volumes is equal to (3x*N*), where *N* is the maximum
         number of discrete orientations in any voxel in the image. In voxels
         in which less than *N* directions are represented, triplets above the
-        number *M* < *N* that are represented are encoded as `[0, 0, 0]`.
+        number *M* < *N* that are represented are encoded as `[nan, nan, nan]`.
 
     2.  Directions only
 
@@ -196,7 +196,7 @@ interpretation of that information; see [orientation specification](#orientation
     Number of image volumes is equal to (3x*N*), where *N* is the maximum
     number of discrete orientations in any voxel in the image. As above,
     for voxels with less directions, any direction above *M* < *N* would
-    be represented as `[0, 0, 0]`.
+    be represented as `[nan, nan, nan]`.
 
 5.  <a name="data-sh">*Spherical Harmonics (SH)*</a>:
 
