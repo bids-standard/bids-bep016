@@ -72,6 +72,10 @@ using the following conventions:
 - Only one metadata file, "`<source_keywords>[_space-<space>]_model-<label>_dwimap.json`"
     is allowed for each set of files that has a specific `model-<label>` entity.
 
+- In the case that multiple data files are addressed by one metadata json file,
+    the metadata file MAY include sub-dictionaries that refer specifically only to
+    metadata that addresses each of these files.
+
 Example:
 
 ```Text
