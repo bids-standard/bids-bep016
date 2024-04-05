@@ -78,27 +78,11 @@ Example:
 my_tensors/
     sub-01/
         dwi/
-            sub-01_model-DTI_param_Sxx_dwimap.nii.gz
-            sub-01_model-DTI_param_Sxy_dwimap.nii.gz
-            sub-01_model-DTI_param_Sxz_dwimap.nii.gz
-            sub-01_model-DTI_param_Syy_dwimap.nii.gz
-            sub-01_model-DTI_param_Syz_dwimap.nii.gz
-            sub-01_model-DTI_param_Szz_dwimap.nii.gz
             sub-01_model-DTI_dwimap.json
+            sub-01_model-DTI_param-tensor_dwimap.nii.gz
             sub-01_model-DTI_param-FA_dwimap.nii.gz
             sub-01_model-DTI_param-MD_dwimap.nii.gz
-
 ```
-
-In cases where a set of different parameters are contained within a single image
-file, entity "`_param-`" MUST NOT be included; e.g.:
-    ```Text
-    <pipeline_name>/
-        sub-<participant_label>/
-            dwi/
-                <source_keywords>[_space-<space>]_model-<label>_dwimap.nii[.gz]
-                <source_keywords>[_space-<space>]_model-<label>_dwimap.json
-    ```
 
 Example:
 
@@ -106,12 +90,12 @@ Example:
 my_tensors/
     sub-01/
         dwi/
-            sub-01_model-DTI_dwimap.nii.gz # Contains the six diffusion tensor components
             sub-01_model-DTI_dwimap.json
+            sub-01_model-DTI_param-tensor_dwimap.nii.gz # Contains the six diffusion tensor components
             sub-01_model-DTI_param-FA_dwimap.nii.gz
             sub-01_model-DTI_param-MD_dwimap.nii.gz
-            sub-01_model-DKI_dwimap.nii.gz # Contains the fifteen kurtosis tensor components
             sub-01_model-DKI_dwimap.json
+            sub-01_model-DKI_param-tensor_dwimap.nii.gz # Contains the twenty-one difffusion + kurtosis tensor components
             sub-01_model-DKI_param-FA_dwimap.nii.gz
             sub-01_model-DKI_param-MD_dwimap.nii.gz
 ```
