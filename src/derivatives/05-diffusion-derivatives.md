@@ -187,9 +187,8 @@ see [parameter metadata](#parameter-metadata).
     a continuous function spanning the 2-sphere
     using coefficients within a spherical harmonics basis.
 
-    Number of image volumes depends on the spherical harmonic basis employed,
-    and the maximal spherical harmonic degree *l<sub>max</sub>*
-    (see [spherical harmonics bases](#spherical-harmonics-bases)).
+    Number of image volumes depends on the maximal spherical harmonic degree *l<sub>max</sub>*
+    (see [spherical harmonics serialization](../../appendices/spherical-harmonics.md#sh-serialization-and-deserialization)).
 
 1.  <a name="encoding-amp">*Amplitudes*</a>:
 
@@ -256,12 +255,12 @@ The following table defines reserved fields within the `"Model"` sub-dictionary.
 
 Dictionary `"Model["Parameters"]"` has the following reserved keywords that may be applicable to a broad range of models:
 
-| **Key name**           | **Description**                                                                                                                                                                                                                                                                                               |
-| ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Key name**           | **Description**                                                                                                                                                                                                                                                                                                |
+| ---------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | FitMethod              | OPTIONAL. String. The optimization procedure used to fit the intrinsic model parameters to the empirical diffusion-weighted signal. Reserved values are: "`ols`" (Ordinary Least Squares); "`wls`" (Weighted Least Squares); "`iwls`" (Iterative Weighted Least Squares); "`nlls`" (Non-Linear Least Squares). |
-| Iterations             | OPTIONAL. Integer. The number of iterations used for any form of model fitting procedure where the number of iterations is a fixed input parameter.                                                                                                                                                           |
-| OutlierRejectionMethod | OPTIONAL. String. Text describing any form of rejection of outlier values that was performed during fitting of the model.                                                                                                                                                                                     |
-| Samples                | OPTIONAL. Integer. The number of realisations of a diffusion model from which statistical summaries (such as mean, standard deviation) of those parameters were computed.                                                                                                                                        |
+| Iterations             | OPTIONAL. Integer. The number of iterations used for any form of model fitting procedure where the number of iterations is a fixed input parameter.                                                                                                                                                            |
+| OutlierRejectionMethod | OPTIONAL. String. Text describing any form of rejection of outlier values that was performed during fitting of the model.                                                                                                                                                                                      |
+| Samples                | OPTIONAL. Integer. The number of realisations of a diffusion model from which statistical summaries (such as mean, standard deviation) of those parameters were computed.                                                                                                                                      |
 
 #### Parameter metadata
 
@@ -293,8 +292,8 @@ Dictionary `"OrientationEncoding"` has the following reserved keywords:
 | EncodingAxis            | All except [scalar](#encoding-scalar)                                                                                                                                      | REQUIRED. Integer. Indicates the image axis (indexed from zero) along which image intensities should be interpreted as corresponding to orientation encoding.                                                                                                                                                                                                                                                                |
 | FillValue               | [Scalar](#encoding-scalar), [spherical coordinates](#encoding-spherical), [3-vectors](#encoding-3vector)                                                                   | OPTIONAL. Float; allowed values: { 0.0, NaN }. Value stored in image when the number of discrete orientations in a given voxel is fewer than the maximal number for that image.                                                                                                                                                                                                                                              |
 | Reference               | All except [scalar](#encoding-scalar)                                                                                                                                      | REQUIRED. String; allowed values: { `ijk`, `xyz` }. Indicates whether the NIfTI image axes, or scanner-space axes, are used as reference axes for orientation information.                                                                                                                                                                                                                                                   |
-| SphericalHarmonicBasis  | [Spherical harmonics](#encoding-sh)                                                                                                                                        | REQUIRED for `"Type": "sh"`; MUST NOT be specified otherwise. String. Options are: { `mrtrix3`, `descoteaux` }. Details are provided in the [spherical harmonics bases](#spherical-harmonics-bases) section.                                                                                                                                                                                                                 |
-| SphericalHarmonicDegree | [Spherical harmonics](#encoding-sh)                                                                                                                                        | OPTIONAL for `"Type": "sh"`; MUST NOT be specified otherwise. Integer. The maximal spherical harmonic order *l<sub>max</sub>*; the number of volumes in the associated NIfTI image must correspond to this value as per the relationship described in [spherical harmonics bases](#spherical-harmonics-bases) section.                                                                                                       |
+| SphericalHarmonicBasis  | [Spherical harmonics](#encoding-sh)                                                                                                                                        | REQUIRED for `"Type": "sh"`; MUST NOT be specified otherwise. String. Options are: { `mrtrix3`, `descoteaux` }. Details are provided in the [appendix on Spherical Harmonics](../../appendices/spherical-harmonics.md#bases).                                                                                                                                                                                                |
+| SphericalHarmonicDegree | [Spherical harmonics](#encoding-sh)                                                                                                                                        | OPTIONAL for `"Type": "sh"`; MUST NOT be specified otherwise. Integer. The maximal spherical harmonic order *l<sub>max</sub>*; the number of volumes in the associated NIfTI image must correspond to this value as per the relationship described in the [appendix on Spherical Harmonics](../../appendices/spherical-harmonics.md#sh-serialization-and-deserialization).                                                   |
 | TensorRank              | [Tensor](#encoding-tensor)                                                                                                                                                 | REQUIRED for `"Type": "tensor"; MUST NOT be specified otherwise. Integer. Rank of tensor reporesentation. Specification currently only supports a value of 2.                                                                                                                                                                                                                                                                |
 | Type                    | Any                                                                                                                                                                        | REQUIRED. String. Specifies the type of orientation information (if any) encoded in the NIfTI image. Permitted values: { `scalar`, `dec`, `unitspherical`, `spherical`, `unit3vector`, `3vector`, `tensor`, `sh`, `amplitudes` }.                                                                                                                                                                                            |
 
@@ -314,13 +313,16 @@ Dictionary `"ResponseFunction"` has the following reserved keywords:
     then the values provided can be one of the following:
 
     -   List of floating-point values.
-        Values correspond to the response function coefficient for each consecutive even zonal spherical harmonic degree starting from zero.
+        Values correspond to [serialized zonal spherical harmonic coefficients](../../appendices/spherical-harmonics.md#zsh-serialization-and-deserialization)
+        in the nominated spherical harmonics basis.
 
     -   List of lists of floating-point values.
         One list per unique *b*-value.
-        Each individual list contains a coefficient per even zonal spherical harmonic degree starting from zero.
+        Each individual list contains [serialized zonal spherical harmonic coefficients](../../appendices/spherical-harmonics.md#zsh-serialization-and-deserialization).
+        in the nominated spherical harmonics basis.
         If the response function utilized has a different number of non-zero zonal spherical harmonic coefficients for different *b*-values,
-        these must be padded with zeroes such that all lists contain the same number of floating-point values.
+        these must be padded with zeroes such that all lists contain the same number of floating-point values
+        (that is, a regular matrix is formed).
 
 ### Demonstrative examples
 
@@ -838,74 +840,3 @@ Dictionary `"ResponseFunction"` has the following reserved keywords:
             given that in the more general case there may be multiple scalar parameters
             individually attributed to each component.
 
-### Appendix
-
-#### Spherical Harmonics
-
--   Concepts shared across all spherical harmonics bases:
-
-    -   Basis functions:
-
-        ![SH basis functions](https://latex.codecogs.com/gif.latex?Y_l^m(\theta,\phi)&space;=&space;\sqrt{\frac{(2l&plus;1)}{4\pi}\frac{(l-m)!}{(l&plus;m)!}}&space;P_l^m(\cos&space;\theta)&space;e^{im\phi}")
-
-        for integer *order* *l*, *phase* *m*, associated Legendre polynomials *P*.
-
-    -   (Truncated) basis coefficients:
-
-        ![SH basis coefficients](https://latex.codecogs.com/gif.latex?f(\theta,\phi)&space;=&space;\sum_{l=0}^{l_\text{max}}&space;\sum_{m=-l}^{l}&space;c_l^m&space;Y_l^m(\theta,\phi)")
-
-        for *maximum* spherical harmonic order *l<sub>max</sub>*.
-
-    -   Functions assumed to be real: conjugate symmetry is assumed, that is,
-        *Y*(*l*,-*m*) = *Y*(*l*,*m*)\*, where \* denotes the complex
-        conjugate.
-
-    -   Antipodally symmetric: all basis functions with odd degree are
-        assumed zero; `AntipodalSymmetry` MUST NOT be set to `False`.
-
-    -   Utilized basis functions:
-
-        -   `mrtrix3`
-
-        ![MRtrix3 SH basis functions](https://latex.codecogs.com/gif.latex?Y_{lm}(\theta,\phi)=\begin{Bmatrix}&space;0&\text{if&space;}l\text{&space;is&space;odd},\\&space;\sqrt{2}\times\text{Im}\left[Y_l^{-m}(\theta,\phi)\right]&\text{if&space;}m<0,\\&space;Y_l^0(\theta,\phi)&\text{if&space;}m=0,\\&space;\sqrt{2}\times\text{Re}\left[Y_l^m(\theta,\phi)\right]&\text{if&space;}m>0\\&space;\end{Bmatrix})
-
-        -   `descoteaux`
-
-        ![Descoteaux SH basis functions](https://latex.codecogs.com/gif.latex?Y_{lm}(\theta,\phi)=\begin{Bmatrix}&space;0&\text{if&space;}l\text{&space;is&space;odd},\\&space;\sqrt{2}\times\text{Re}\left[Y_l^{-m}(\theta,\phi)\right]&\text{if&space;}m<0,\\&space;Y_l^0(\theta,\phi)&\text{if&space;}m=0,\\&space;\sqrt{2}\times\text{Im}\left[Y_l^m(\theta,\phi)\right]&\text{if&space;}m>0\\&space;\end{Bmatrix})
-
-    -   Mapping between image volume *V* and spherical harmonic basis
-        function coefficient *Y<sub>l,m</sub>*:
-
-        *V<sub>l,m</sub>* = (*l*(*l*+1) / 2) + *m*
-
-        | ***V*** | **Coefficient**    |
-        | ------- | ------------------ |
-        | 0       | *Y<sub>0,0</sub>*  |
-        | 1       | *Y<sub>2,-2</sub>* |
-        | 2       | *Y<sub>2,-1</sub>* |
-        | 3       | *Y<sub>2,0</sub>*  |
-        | 4       | *Y<sub>2,1</sub>*  |
-        | 5       | *Y<sub>2,2</sub>*  |
-        | 6       | *Y<sub>4,-4</sub>* |
-        | 7       | *Y<sub>4,-3</sub>* |
-        | ...     | ...                |
-
-    -   Relationship between maximal spherical harmonic degree *l<sub>max</sub>*
-        and number of image volumes *N*:
-
-        *N* = ((*l<sub>max</sub>*+1) x (*l<sub>max</sub>*+2)) / 2
-
-        | ***l<sub>max</sub>*** | 0 | 2 | 4  | 6  | 8  | 10 | ... |
-        | --------------------- |--:|--:|--: |--: |--: |--: | :--: |
-        | ***N***               | 1 | 6 | 15 | 28 | 45 | 66 | ... |
-
-    -   Relationship between maximal degree of *zonal* spherical harmonic
-        function (spherical harmonics function where all *m* != 0 terms are
-        assumed to be zero; used for response function definition and similar) and
-        number of coefficients *N*:
-
-        *N* = 1 + (*l<sub>max</sub>* / 2)
-
-        | ***l<sub>max</sub>*** | 0 | 2 | 4 | 6 | 8 | 10 | ... |
-        | --------------------- |--:|--:|--:|--:|--:|--: | :--: |
-        | ***N***               | 1 | 2 | 3 | 4 | 5 | 6  | ... |
