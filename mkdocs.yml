@@ -41,6 +41,7 @@ nav:
           - Quantitative MRI: appendices/qmri.md
           - Arterial Spin Labeling: appendices/arterial-spin-labeling.md
           - Cross modality correspondence: appendices/cross-modality-correspondence.md
+          - Spherical Harmonics: appendices/spherical-harmonics.md
       - Changelog: CHANGES.md
   - The BIDS Starter Kit:
       - Website: https://bids-standard.github.io/bids-starter-kit/
