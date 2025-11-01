@@ -52,7 +52,7 @@ jobs:
           run: |
             cat ~/changelog_build/CHANGES.md
         - name: Archive changelog
-          uses: actions/upload-artifact@v4
+          uses: actions/upload-artifact@v5
           with:
             name: changelog_pre_lint
             path: |
@@ -64,12 +64,12 @@ jobs:
         steps:
         - uses: actions/checkout@v5
         - name: Download previously build changelog
-          uses: actions/download-artifact@v5
+          uses: actions/download-artifact@v6
           with:
             name: changelog_pre_lint
             path: ~/changelog_build
         - name: Set up Node
-          uses: actions/setup-node@v4
+          uses: actions/setup-node@v6
           with:
             node-version: 20
         - name: Install remark and extensions
@@ -93,7 +93,7 @@ jobs:
             head -n 25 ~/changelog_build/CHANGES.md
             npx remark ~/changelog_build/CHANGES.md --rc-path ${{ github.workspace }}/.remarkrc --frail --quiet --no-stdout
         - name: Archive linted changelog
-          uses: actions/upload-artifact@v4
+          uses: actions/upload-artifact@v5
           with:
             name: changelog_post_lint
             path: |
@@ -110,7 +110,7 @@ jobs:
         steps:
         - uses: actions/checkout@v5
         - name: Download previously build changelog
-          uses: actions/download-artifact@v5
+          uses: actions/download-artifact@v6
           with:
             name: changelog_post_lint
             path: ~/changelog_build
