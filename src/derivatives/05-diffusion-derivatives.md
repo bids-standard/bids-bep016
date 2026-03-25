@@ -185,7 +185,7 @@ see [parameter metadata](#parameter-metadata).
     a continuous function spanning the 2-sphere
     using coefficients within a spherical harmonics basis.
 
-    Number of image volumes depends on the maximal spherical harmonic degree *l<sub>max</sub>*
+    Number of image volumes depends on the maximal spherical harmonic order *l<sub>max</sub>*
     (see [spherical harmonics serialization](../../appendices/spherical-harmonics.md#sh-serialization-and-deserialization)).
 
 1.  <a name="encoding-amp">*Amplitudes*</a>:
@@ -291,7 +291,7 @@ Dictionary `"OrientationEncoding"` has the following reserved keywords:
 | FillValue               | [Scalar](#encoding-scalar), [spherical coordinates](#encoding-spherical), [3-vectors](#encoding-3vector)                                                                   | OPTIONAL. Float; allowed values: { 0.0, NaN }. Value stored in image when the number of discrete orientations in a given voxel is fewer than the maximal number for that image.                                                                                                                                                                                                                                              |
 | Reference               | All except [scalar](#encoding-scalar)                                                                                                                                      | REQUIRED. String; allowed values: { `bvec`, `ijk`, `xyz` }. Defines the reference coordinate system against which orientation information is encoded (more below).                                                                                                                                                                                                                                                   |
 | SphericalHarmonicBasis  | [Spherical harmonics](#encoding-sh)                                                                                                                                        | REQUIRED for `"Type": "sh"`; MUST NOT be specified otherwise. String. Options are: { `mrtrix3`, `descoteaux` }. Details are provided in the [appendix on Spherical Harmonics](../../appendices/spherical-harmonics.md#bases).                                                                                                                                                                                                |
-| SphericalHarmonicDegree | [Spherical harmonics](#encoding-sh)                                                                                                                                        | OPTIONAL for `"Type": "sh"`; MUST NOT be specified otherwise. Integer. The maximal spherical harmonic order *l<sub>max</sub>*; the number of volumes in the associated NIfTI image must correspond to this value as per the relationship described in the [appendix on Spherical Harmonics](../../appendices/spherical-harmonics.md#sh-serialization-and-deserialization).                                                   |
+| SphericalHarmonicOrder  | [Spherical harmonics](#encoding-sh)                                                                                                                                        | OPTIONAL for `"Type": "sh"`; MUST NOT be specified otherwise. Integer. The maximal spherical harmonic order *l<sub>max</sub>*; the number of volumes in the associated NIfTI image must correspond to this value as per the relationship described in the [appendix on Spherical Harmonics](../../appendices/spherical-harmonics.md#sh-serialization-and-deserialization).                                                   |
 | TensorRank              | [Tensor](#encoding-tensor)                                                                                                                                                 | REQUIRED for `"Type": "tensor"; MUST NOT be specified otherwise. Integer. Rank of tensor reporesentation. Specification currently only supports a value of 2.                                                                                                                                                                                                                                                                |
 | Type                    | Any                                                                                                                                                                        | REQUIRED. String. Specifies the type of orientation information (if any) encoded in the NIfTI image. Permitted values: { `scalar`, `dec`, `unitspherical`, `spherical`, `unit3vector`, `3vector`, `tensor`, `sh`, `amplitudes` }.                                                                                                                                                                                            |
 
@@ -473,7 +473,7 @@ Contents of JSON file "`sub-01_model-csd_param-wm_model.json`":
         "EncodingAxis": 3,
         "Reference": "xyz",
         "SphericalHarmonicBasis": "MRtrix3",
-        "SphericalHarmonicDegree": 8,
+        "SphericalHarmonicOrder": 8,
         "Type": "sh",
     },
     "ParameterURL": "http://www.sciencedirect.com/science/article/pii/S1053811911012092",
@@ -501,7 +501,7 @@ Contents of JSON file "`sub-01_model-csd_param-gm_dwimap.json`":
         "EncodingAxis": 3,
         "Reference": "xyz",
         "SphericalHarmonicBasis": "MRtrix3",
-        "SphericalHarmonicDegree": 0,
+        "SphericalHarmonicOrder": 0,
         "Type": "sh",
     },
     "ResponseFunction": {
@@ -528,7 +528,7 @@ Contents of JSON file "`sub-01_model-csd_param-csf_dwimap.json`":
         "EncodingAxis": 3,
         "Reference": "xyz",
         "SphericalHarmonicBasis": "MRtrix3",
-        "SphericalHarmonicDegree": 0,
+        "SphericalHarmonicOrder": 0,
         "Type": "sh"
     },
     "ResponseFunction": {
@@ -545,7 +545,7 @@ Notes:
 
 -   In this example,
     the gray matter and CSF compartments are specified in the spherical harmonics basis
-    with maximal spherical harmonic degrees of zero,
+    with maximal spherical harmonic orders of zero,
     even though each image only contains a single volume
     and could therefore be interpreted as simply scalar parameters.
     This is recommended in this instance
@@ -553,12 +553,12 @@ Notes:
     that should be taken into account if comparing the values of these parameters
     with the *l*=0 term of the white matter ODF.
 
--   The response functions for GM and CSF have a maximal zonal spherical harmonic degree of zero,
+-   The response functions for GM and CSF have a maximal zonal spherical harmonic order of zero,
     such that only one coefficient is required for each unique *b*-value shell.
     It is however nevertheless vital that these data be provided as a list of lists of floats,
     where the length of each list is one;
     storing these values as a list of floats would be erroneously interpreted
-    as coefficients of different zonal spherical harmonic degrees for a single *b*-value shell.
+    as coefficients of different zonal spherical harmonic orders for a single *b*-value shell.
 
 #### An FSL `bedpostx` Ball-And-Sticks fit
 
@@ -874,4 +874,3 @@ Notes:
         It is however RECOMMENDED to encode this information in separate files,
         given that in the more general case there may be multiple scalar parameters
         individually attributed to each component.
-

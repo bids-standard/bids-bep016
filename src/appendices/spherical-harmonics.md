@@ -27,8 +27,8 @@ where \* denotes the complex conjugate.
 
 ## Antipodal symmetry
 
-All functions represented using a spherical harmonics based are assumed to be antipodally symmetric.
-This implies that all basis functions with odd degree are zero.
+All functions currently represented using a spherical harmonics based are assumed to be antipodally symmetric.
+This implies that all basis functions with odd order are zero.
 
 ## Bases
 
@@ -76,9 +76,9 @@ and total number of coefficients *N*:
 
 *N* = ((*l<sub>max</sub>*+1) x (*l<sub>max</sub>*+2)) / 2
 
-| ***l<sub>max</sub>*** | 0 | 2 | 4  | 6  | 8  | 10 | ... |
+| ***l<sub>max</sub>*** | 0 | 2 | 4  | 6  | 8  | 10 | ...  |
 | --------------------- |--:|--:|--: |--: |--: |--: | :--: |
-| ***N***               | 1 | 6 | 15 | 28 | 45 | 66 | ... |
+| ***N***               | 1 | 6 | 15 | 28 | 45 | 66 | ...  |
 
 ### ZSH serialization and deserialization
 
@@ -101,6 +101,6 @@ and total number of coefficients *N*:
 
 *N* = 1 + *l*/2
 
-| ***l<sub>max</sub>*** | 0 | 2 | 4 | 6 | 8 | 10 | ... |
+| ***l<sub>max</sub>*** | 0 | 2 | 4 | 6 | 8 | 10 | ...  |
 | --------------------- |--:|--:|--:|--:|--:|--: | :--: |
-| ***N***               | 1 | 2 | 3 | 4 | 5 | 6  | ... |
+| ***N***               | 1 | 2 | 3 | 4 | 5 | 6  | ...  |
