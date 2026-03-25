@@ -54,12 +54,12 @@ that warrant explicit mention due to their consequence in how they are represent
 <pipeline_name>/
     sub-<participant_label>/
         dwi/
-            <source_keywords>[_space-<space>]_model-<label>[_desc-<desc>]_param-<label1>_dwimap.nii[.gz]
-            <source_keywords>[_space-<space>]_model-<label>[_desc-<desc>]_param-<label1>_dwimap.json
-            <source_keywords>[_space-<space>]_model-<label>[_desc-<desc>]_param-<label2>_dwimap.nii[.gz]
-            <source_keywords>[_space-<space>]_model-<label>[_desc-<desc>]_param-<label2>_dwimap.json
-            <source_keywords>[_space-<space>]_model-<label>[_desc-<desc>]_param-<label3>_dwimap.nii[.gz]
-            <source_keywords>[_space-<space>]_model-<label>[_desc-<desc>]_param-<label3>_dwimap.json
+            <source_keywords>[_space-<space>]_model-<label>_param-<label1>[_desc-<desc>]_dwimap.nii[.gz]
+            <source_keywords>[_space-<space>]_model-<label>_param-<label1>[_desc-<desc>]_dwimap.json
+            <source_keywords>[_space-<space>]_model-<label>_param-<label2>[_desc-<desc>]_dwimap.nii[.gz]
+            <source_keywords>[_space-<space>]_model-<label>_param-<label2>[_desc-<desc>]_dwimap.json
+            <source_keywords>[_space-<space>]_model-<label>_param-<label3>[_desc-<desc>]_dwimap.nii[.gz]
+            <source_keywords>[_space-<space>]_model-<label>_param-<label3>[_desc-<desc>]_dwimap.json
 ```
 
 -   Files "`<source_keywords>_model-<label>_param-<label*>_dwimap.nii[.gz]`"
@@ -572,41 +572,41 @@ A guide for using macros can be found at
     "bedpostx_pipeline": {
         "sub-01": {
         "dwi": {
-            "sub-01_model-bs_desc-mean_param-s0_dwimap.nii.gz": "",
-            "sub-01_model-bs_desc-mean_param-s0_dwimap.json": "",
-            "sub-01_model-bs_desc-mean_param-polar_dwimap.nii.gz": "",
-            "sub-01_model-bs_desc-mean_param-polar_dwimap.json": "",
-            "sub-01_model-bs_desc-mean_param-vector_dwimap.nii.gz": "",
-            "sub-01_model-bs_desc-mean_param-vector_dwimap.json": "",
-            "sub-01_model-bs_desc-mean_param-vf_dwimap.nii.gz": "",
-            "sub-01_model-bs_desc-mean_param-vf_dwimap.json": "",
-            "sub-01_model-bs_desc-mean_param-vfsum_dwimap.nii.gz": "",
-            "sub-01_model-bs_desc-mean_param-vfsum_dwimap.json": "",
-            "sub-01_model-bs_desc-mean_param-diffusivity_dwimap.nii.gz": "",
-            "sub-01_model-bs_desc-mean_param-diffusivity_dwimap.json": "",
-            "sub-01_model-bs_desc-mean_param-dstd_dwimap.nii.gz": "",
-            "sub-01_model-bs_desc-mean_param-dstd_dwimap.json": "",
-            "sub-01_model-bs_desc-merged_param-polar_dwimap.nii.gz": "",
-            "sub-01_model-bs_desc-merged_param-polar_dwimap.json": "",
-            "sub-01_model-bs_desc-merged_param-vf_dwimap.nii.gz": "",
-            "sub-01_model-bs_desc-merged_param-vf_dwimap.json": "",
+            "sub-01_model-bs_param-s0_desc-mean_dwimap.nii.gz": "",
+            "sub-01_model-bs_param-s0_desc-mean_dwimap.json": "",
+            "sub-01_model-bs_param-polar_desc-mean_dwimap.nii.gz": "",
+            "sub-01_model-bs_param-polar_desc-mean_dwimap.json": "",
+            "sub-01_model-bs_param-vector_desc-mean_dwimap.nii.gz": "",
+            "sub-01_model-bs_param-vector_desc-mean_dwimap.json": "",
+            "sub-01_model-bs_param-vf_desc-mean_dwimap.nii.gz": "",
+            "sub-01_model-bs_param-vf_desc-mean_dwimap.json": "",
+            "sub-01_model-bs_param-vfsum_desc-mean_dwimap.nii.gz": "",
+            "sub-01_model-bs_param-vfsum_desc-mean_dwimap.json": "",
+            "sub-01_model-bs_param-diffusivity_desc-mean_dwimap.nii.gz": "",
+            "sub-01_model-bs_param-diffusivity_desc-mean_dwimap.json": "",
+            "sub-01_model-bs__param-dstd_desc-mean_dwimap.nii.gz": "",
+            "sub-01_model-bs__param-dstd_desc-mean_dwimap.json": "",
+            "sub-01_model-bs_param-polar_desc-merged_dwimap.nii.gz": "",
+            "sub-01_model-bs_param-polar_desc-merged_dwimap.json": "",
+            "sub-01_model-bs_param-vf_desc-merged_dwimap.nii.gz": "",
+            "sub-01_model-bs_param-vf_desc-merged_dwimap.json": "",
         },
         },
     },
     }
 ) }}
 
-Dimensions of NIfTI image "`sub-01_model-bs_desc-mean_param-s0_dwimap.nii.gz`": *I*x*J*x*K* ([scalar](#encoding-scalar))
-Dimensions of NIfTI image "`sub-01_model-bs_desc-mean_param-polar_dwimap.nii.gz`": *I*x*J*x*K*x(*2*x*N*) ([spherical coordinates](#encoding-spherical), orientations only; *N* orientations per voxel)
-Dimensions of NIfTI image "`sub-01_model-bs_desc-mean_param-vector_dwimap.nii.gz`": *I*x*J*x*K*x(*3*x*N*) ([3-vectors](#encoding-3vectors), unit norm; *N* orientations per voxel)
-Dimensions of NIfTI image "`sub-01_model-bs_desc-mean_param-vf_dwimap.nii.gz`": *I*x*J*x*K*x*N* ([scalar](#encoding-scalar); *N* values per voxel)
-Dimensions of NIfTI image "`sub-01_model-bs_desc-mean_param-vfsum_dwimap.nii.gz`": *I*x*J*x*K* ([scalar](#encoding-scalar))
-Dimensions of NIfTI image "`sub-01_model-bs_desc-mean_param-diffusivity_dwimap.nii.gz`": *I*x*J*x*K* ([scalar](#encoding-scalar))
-Dimensions of NIfTI image "`sub-01_model-bs_desc-mean_param-dstd_dwimap.nii.gz`": *I*x*J*x*K* ([scalar](#encoding-scalar))
-Dimensions of NIfTI image "`sub-01_model-bs_desc-merged_param-polar_dwimap.nii.gz`": *I*x*J*x*K*x(*2*x*N*)x*R* ([spherical coordinates](#encoding-spherical), orientations only; *N* orientations per voxel; *R* bootstrap realisations)
-Dimensions of NIfTI image "`sub-01_model-bs_desc-merged_param-vf_dwimap.nii.gz`": *I*x*J*x*K*x*N*x*R* ([scalar](#encoding-scalar); *N* values per voxel; *R* bootstrap realisations)
+Dimensions of NIfTI image "`sub-01_model-bs_param-s0_desc-mean_dwimap.nii.gz`": *I*x*J*x*K* ([scalar](#encoding-scalar))
+Dimensions of NIfTI image "`sub-01_model-bs_param-polar_desc-mean_dwimap.nii.gz`": *I*x*J*x*K*x(*2*x*N*) ([spherical coordinates](#encoding-spherical), orientations only; *N* orientations per voxel)
+Dimensions of NIfTI image "`sub-01_model-bs_param-vector_desc-mean_dwimap.nii.gz`": *I*x*J*x*K*x(*3*x*N*) ([3-vectors](#encoding-3vectors), unit norm; *N* orientations per voxel)
+Dimensions of NIfTI image "`sub-01_model-bs_param-vf_desc-mean_dwimap.nii.gz`": *I*x*J*x*K*x*N* ([scalar](#encoding-scalar); *N* values per voxel)
+Dimensions of NIfTI image "`sub-01_model-bs_param-vfsum_desc-mean_dwimap.nii.gz`": *I*x*J*x*K* ([scalar](#encoding-scalar))
+Dimensions of NIfTI image "`sub-01_model-bs_param-diffusivity_desc-mean_dwimap.nii.gz`": *I*x*J*x*K* ([scalar](#encoding-scalar))
+Dimensions of NIfTI image "`sub-01_model-bs_param-dstd_desc-mean_dwimap.nii.gz`": *I*x*J*x*K* ([scalar](#encoding-scalar))
+Dimensions of NIfTI image "`sub-01_model-bs_param-polar_desc-merged_dwimap.nii.gz`": *I*x*J*x*K*x(*2*x*N*)x*R* ([spherical coordinates](#encoding-spherical), orientations only; *N* orientations per voxel; *R* bootstrap realisations)
+Dimensions of NIfTI image "`sub-01_model-bs_param-vf_desc-merged_dwimap.nii.gz`": *I*x*J*x*K*x*N*x*R* ([scalar](#encoding-scalar); *N* values per voxel; *R* bootstrap realisations)
 
-Contents of JSON file "`sub-01_model-bs_desc-mean_param-s0_dwimap.json`":
+Contents of JSON file "`sub-01_model-bs_param-s0_desc-mean_dwimap.json`":
 
 ```JSON
 {
@@ -627,7 +627,7 @@ Contents of JSON file "`sub-01_model-bs_desc-mean_param-s0_dwimap.json`":
 }
 ```
 
-Contents of JSON file "`sub-01_model-bs_desc-mean_param-polar_dwimap.json`":
+Contents of JSON file "`sub-01_model-bs_param-polar_desc-mean_dwimap.json`":
 
 ```JSON
 {
@@ -653,7 +653,7 @@ Contents of JSON file "`sub-01_model-bs_desc-mean_param-polar_dwimap.json`":
 }
 ```
 
-Contents of JSON file "`sub-01_model-bs_desc-mean_param-vector_dwimap.json`":
+Contents of JSON file "`sub-01_model-bs_param-vector_desc-mean_dwimap.json`":
 
 ```JSON
 {
@@ -679,7 +679,7 @@ Contents of JSON file "`sub-01_model-bs_desc-mean_param-vector_dwimap.json`":
 }
 ```
 
-Contents of JSON file "`sub-01_model-bs_desc-mean_param-vf_dwimap.json`":
+Contents of JSON file "`sub-01_model-bs_param-vf_desc-mean_dwimap.json`":
 
 ```JSON
 {
@@ -703,7 +703,7 @@ Contents of JSON file "`sub-01_model-bs_desc-mean_param-vf_dwimap.json`":
 }
 ```
 
-Contents of JSON file "`sub-01_model-bs_desc-mean_param-vfsum_dwimap.json`":
+Contents of JSON file "`sub-01_model-bs_param-vfsum_desc-mean_dwimap.json`":
 
 ```JSON
 {
@@ -724,7 +724,7 @@ Contents of JSON file "`sub-01_model-bs_desc-mean_param-vfsum_dwimap.json`":
 }
 ```
 
-Contents of JSON file "`sub-01_model-bs_desc-mean_param-diffusivity_dwimap.json`":
+Contents of JSON file "`sub-01_model-bs_param-diffusivity_desc-mean_dwimap.json`":
 
 ```JSON
 {
@@ -746,7 +746,7 @@ Contents of JSON file "`sub-01_model-bs_desc-mean_param-diffusivity_dwimap.json`
 }
 ```
 
-Contents of JSON file "`sub-01_model-bs_desc-mean_param-dstd_dwimap.json`":
+Contents of JSON file "`sub-01_model-bs_param-dstd_desc-mean_dwimap.json`":
 
 ```JSON
 {
@@ -767,7 +767,7 @@ Contents of JSON file "`sub-01_model-bs_desc-mean_param-dstd_dwimap.json`":
     "Units": "TODO"
 }
 
-Contents of JSON file "`sub-01_model-bs_desc-merged_param-polar_dwimap.json`":
+Contents of JSON file "`sub-01_model-bs_param-polar_desc-merged_dwimap.json`":
 
 ```JSON
 {
@@ -793,7 +793,7 @@ Contents of JSON file "`sub-01_model-bs_desc-merged_param-polar_dwimap.json`":
     }
 }
 
-Contents of JSON file "`sub-01_model-bs_desc-merged_param-vf_dwimap.json`":
+Contents of JSON file "`sub-01_model-bs_param-vf_desc-merged_dwimap.json`":
 
 ```JSON
 {
@@ -828,7 +828,7 @@ Notes:
 -   Care must be taken for images of greater than three dimensions
     where additional dimensions do *not* encode anisotropy information:
 
-    -   In image `"*_desc-mean*_param-vf_*"`,
+    -   In image `"*_param-vf_desc-mean_dwimap.nii.gz"`,
         the fourth image axis encodes scalar information across stick components.
         Since this is *not* coefficients in some orientation encoding,
         but the image possesses more than three axes,
@@ -838,7 +838,7 @@ Notes:
         and therefore the fact that it encodes a scalar parameter
         can be robustly inferred without reference to metadata information.
 
-    -   In image `"sub-01_model-bs_desc-merged_param-vf_dwimap.json"`,
+    -   In image `"sub-01_model-bs_param-vf_desc-merged_dwimap.json"`,
         there are two extra image dimensions beyond the three spatial dimensions:
         the fourth image axis encodes across the multiple stick components per voxel,
         and the fifth axis encodes realisations across bootstraps.
