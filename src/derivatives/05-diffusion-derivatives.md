@@ -22,8 +22,8 @@
     sub-<participant_label>/
         dwi/
             <source_keywords>[_space-<space>]_desc-preproc_dwi.nii[.gz]
-            <source_keywords>[_space-<space>]_desc-preproc_dwi.bvals
-            <source_keywords>[_space-<space>]_desc-preproc_dwi.bvecs
+            <source_keywords>[_space-<space>]_desc-preproc_dwi.bval
+            <source_keywords>[_space-<space>]_desc-preproc_dwi.bvec
             <source_keywords>[_space-<space>]_desc-preproc_dwi.json
 ```
 
@@ -290,7 +290,7 @@ Dictionary `"OrientationEncoding"` has the following reserved keywords:
 | AntipodalSymmetry       | [spherical coordinates](#encoding-spherical), [3-vectors](#encoding-3vector), [tensor](#encoding-tensor), [amplitudes](#encoding-amp), [spherical harmonics](#encoding-sh) | OPTIONAL. Boolean. Indicates whether orientation information should be interpreted as being antipodally symmetric. Assumed to be True if omitted.                                                                                                                                                                                                                                                                            |
 | EncodingAxis            | All except [scalar](#encoding-scalar)                                                                                                                                      | REQUIRED. Integer. Indicates the image axis (indexed from zero) along which image intensities should be interpreted as corresponding to orientation encoding.                                                                                                                                                                                                                                                                |
 | FillValue               | [Scalar](#encoding-scalar), [spherical coordinates](#encoding-spherical), [3-vectors](#encoding-3vector)                                                                   | OPTIONAL. Float; allowed values: { 0.0, NaN }. Value stored in image when the number of discrete orientations in a given voxel is fewer than the maximal number for that image.                                                                                                                                                                                                                                              |
-| Reference               | All except [scalar](#encoding-scalar)                                                                                                                                      | REQUIRED. String; allowed values: { `bvec`, `ijk`, `xyz` }. Defines the reference coordinate system against which orientation information is encoded (more below).                                                                                                                                                                                                                                                           |
+| Reference               | All except [scalar](#encoding-scalar)                                                                                                                                      | REQUIRED. String; allowed values: { `fsl`, `ijk`, `xyz` }. Defines the reference coordinate system against which orientation information is encoded (more below).                                                                                                                                                                                                                                                           |
 | SphericalHarmonicBasis  | [Spherical harmonics](#encoding-sh)                                                                                                                                        | REQUIRED for `"Type": "sh"`; MUST NOT be specified otherwise. String. Options are: { `mrtrix3`, `descoteaux` }. Details are provided in the [spherical harmonics bases](#spherical-harmonics-bases) section.                                                                                                                                                                                                                 |
 | SphericalHarmonicDegree | [Spherical harmonics](#encoding-sh)                                                                                                                                        | OPTIONAL for `"Type": "sh"`; MUST NOT be specified otherwise. Integer. The maximal spherical harmonic order *l<sub>max</sub>*; the number of volumes in the associated NIfTI image must correspond to this value as per the relationship described in [spherical harmonics bases](#spherical-harmonics-bases) section.                                                                                                       |
 | TensorRank              | [Tensor](#encoding-tensor)                                                                                                                                                 | REQUIRED for `"Type": "tensor"; MUST NOT be specified otherwise. Integer. Rank of tensor reporesentation. Specification currently only supports a value of 2.                                                                                                                                                                                                                                                                |
@@ -300,7 +300,7 @@ Field `"OrientationEncoding"["Reference"]` MUST contain one of the following val
 
 | **Value** | **Interpretation**                                                                                                                                                                                                                                                            |
 | --------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| bvec      | The three spatial image axes; **unless** those axes form a right-handed coordinate system (that is, the 3x3 linear component of the NIfTI header transformation has a positive determinant), in which case the negative of the first axis orientation is the first reference. |
+| fsl      | The three spatial image axes; **unless** those axes form a right-handed coordinate system (that is, the 3x3 linear component of the NIfTI header transformation has a positive determinant), in which case the negative of the first axis orientation is the first reference.  |
 | ijk       | The three spatial image axes define the orientation reference.                                                                                                                                                                                                                |
 | xyz       | The "real" / "scanner" space axes, which are independent of the NIfTI image header transform, define the orientation reference.                                                                                                                                               |
 
@@ -572,41 +572,41 @@ A guide for using macros can be found at
     "bedpostx_pipeline": {
         "sub-01": {
         "dwi": {
-            "sub-01_model-bs_desc-mean_param-s0_dwimap.nii.gz": "",
-            "sub-01_model-bs_desc-mean_param-s0_dwimap.json": "",
-            "sub-01_model-bs_desc-mean_param-polar_dwimap.nii.gz": "",
-            "sub-01_model-bs_desc-mean_param-polar_dwimap.json": "",
-            "sub-01_model-bs_desc-mean_param-vector_dwimap.nii.gz": "",
-            "sub-01_model-bs_desc-mean_param-vector_dwimap.json": "",
-            "sub-01_model-bs_desc-mean_param-vf_dwimap.nii.gz": "",
-            "sub-01_model-bs_desc-mean_param-vf_dwimap.json": "",
-            "sub-01_model-bs_desc-mean_param-vfsum_dwimap.nii.gz": "",
-            "sub-01_model-bs_desc-mean_param-vfsum_dwimap.json": "",
-            "sub-01_model-bs_desc-mean_param-diffusivity_dwimap.nii.gz": "",
-            "sub-01_model-bs_desc-mean_param-diffusivity_dwimap.json": "",
-            "sub-01_model-bs_desc-mean_param-dstd_dwimap.nii.gz": "",
-            "sub-01_model-bs_desc-mean_param-dstd_dwimap.json": "",
-            "sub-01_model-bs_desc-merged_param-polar_dwimap.nii.gz": "",
-            "sub-01_model-bs_desc-merged_param-polar_dwimap.json": "",
-            "sub-01_model-bs_desc-merged_param-vf_dwimap.nii.gz": "",
-            "sub-01_model-bs_desc-merged_param-vf_dwimap.json": "",
+            "sub-01_model-ballsticks_desc-mean_param-s0_dwimap.nii.gz": "",
+            "sub-01_model-ballsticks_desc-mean_param-s0_dwimap.json": "",
+            "sub-01_model-ballsticks_desc-mean_param-polar_dwimap.nii.gz": "",
+            "sub-01_model-ballsticks_desc-mean_param-polar_dwimap.json": "",
+            "sub-01_model-ballsticks_desc-mean_param-vector_dwimap.nii.gz": "",
+            "sub-01_model-ballsticks_desc-mean_param-vector_dwimap.json": "",
+            "sub-01_model-ballsticks_desc-mean_param-vf_dwimap.nii.gz": "",
+            "sub-01_model-ballsticks_desc-mean_param-vf_dwimap.json": "",
+            "sub-01_model-ballsticks_desc-mean_param-vfsum_dwimap.nii.gz": "",
+            "sub-01_model-ballsticks_desc-mean_param-vfsum_dwimap.json": "",
+            "sub-01_model-ballsticks_desc-mean_param-diffusivity_dwimap.nii.gz": "",
+            "sub-01_model-ballsticks_desc-mean_param-diffusivity_dwimap.json": "",
+            "sub-01_model-ballsticks_desc-mean_param-dstd_dwimap.nii.gz": "",
+            "sub-01_model-ballsticks_desc-mean_param-dstd_dwimap.json": "",
+            "sub-01_model-ballsticks_desc-merged_param-polar_dwimap.nii.gz": "",
+            "sub-01_model-ballsticks_desc-merged_param-polar_dwimap.json": "",
+            "sub-01_model-ballsticks_desc-merged_param-vf_dwimap.nii.gz": "",
+            "sub-01_model-ballsticks_desc-merged_param-vf_dwimap.json": "",
         },
         },
     },
     }
 ) }}
 
-Dimensions of NIfTI image "`sub-01_model-bs_desc-mean_param-s0_dwimap.nii.gz`": *I*x*J*x*K* ([scalar](#encoding-scalar))
-Dimensions of NIfTI image "`sub-01_model-bs_desc-mean_param-polar_dwimap.nii.gz`": *I*x*J*x*K*x(*2*x*N*) ([spherical coordinates](#encoding-spherical), orientations only; *N* orientations per voxel)
-Dimensions of NIfTI image "`sub-01_model-bs_desc-mean_param-vector_dwimap.nii.gz`": *I*x*J*x*K*x(*3*x*N*) ([3-vectors](#encoding-3vectors), unit norm; *N* orientations per voxel)
-Dimensions of NIfTI image "`sub-01_model-bs_desc-mean_param-vf_dwimap.nii.gz`": *I*x*J*x*K*x*N* ([scalar](#encoding-scalar); *N* values per voxel)
-Dimensions of NIfTI image "`sub-01_model-bs_desc-mean_param-vfsum_dwimap.nii.gz`": *I*x*J*x*K* ([scalar](#encoding-scalar))
-Dimensions of NIfTI image "`sub-01_model-bs_desc-mean_param-diffusivity_dwimap.nii.gz`": *I*x*J*x*K* ([scalar](#encoding-scalar))
-Dimensions of NIfTI image "`sub-01_model-bs_desc-mean_param-dstd_dwimap.nii.gz`": *I*x*J*x*K* ([scalar](#encoding-scalar))
-Dimensions of NIfTI image "`sub-01_model-bs_desc-merged_param-polar_dwimap.nii.gz`": *I*x*J*x*K*x(*2*x*N*)x*R* ([spherical coordinates](#encoding-spherical), orientations only; *N* orientations per voxel; *R* bootstrap realisations)
-Dimensions of NIfTI image "`sub-01_model-bs_desc-merged_param-vf_dwimap.nii.gz`": *I*x*J*x*K*x*N*x*R* ([scalar](#encoding-scalar); *N* values per voxel; *R* bootstrap realisations)
+Dimensions of NIfTI image "`sub-01_model-ballsticks_desc-mean_param-s0_dwimap.nii.gz`": *I*x*J*x*K* ([scalar](#encoding-scalar))
+Dimensions of NIfTI image "`sub-01_model-ballsticks_desc-mean_param-polar_dwimap.nii.gz`": *I*x*J*x*K*x(*2*x*N*) ([spherical coordinates](#encoding-spherical), orientations only; *N* orientations per voxel)
+Dimensions of NIfTI image "`sub-01_model-ballsticks_desc-mean_param-vector_dwimap.nii.gz`": *I*x*J*x*K*x(*3*x*N*) ([3-vectors](#encoding-3vectors), unit norm; *N* orientations per voxel)
+Dimensions of NIfTI image "`sub-01_model-ballsticks_desc-mean_param-vf_dwimap.nii.gz`": *I*x*J*x*K*x*N* ([scalar](#encoding-scalar); *N* values per voxel)
+Dimensions of NIfTI image "`sub-01_model-ballsticks_desc-mean_param-vfsum_dwimap.nii.gz`": *I*x*J*x*K* ([scalar](#encoding-scalar))
+Dimensions of NIfTI image "`sub-01_model-ballsticks_desc-mean_param-diffusivity_dwimap.nii.gz`": *I*x*J*x*K* ([scalar](#encoding-scalar))
+Dimensions of NIfTI image "`sub-01_model-ballsticks_desc-mean_param-dstd_dwimap.nii.gz`": *I*x*J*x*K* ([scalar](#encoding-scalar))
+Dimensions of NIfTI image "`sub-01_model-ballsticks_desc-merged_param-polar_dwimap.nii.gz`": *I*x*J*x*K*x(*2*x*N*)x*R* ([spherical coordinates](#encoding-spherical), orientations only; *N* orientations per voxel; *R* bootstrap realisations)
+Dimensions of NIfTI image "`sub-01_model-ballsticks_desc-merged_param-vf_dwimap.nii.gz`": *I*x*J*x*K*x*N*x*R* ([scalar](#encoding-scalar); *N* values per voxel; *R* bootstrap realisations)
 
-Contents of JSON file "`sub-01_model-bs_desc-mean_param-s0_dwimap.json`":
+Contents of JSON file "`sub-01_model-ballsticks_desc-mean_param-s0_dwimap.json`":
 
 ```JSON
 {
@@ -627,7 +627,7 @@ Contents of JSON file "`sub-01_model-bs_desc-mean_param-s0_dwimap.json`":
 }
 ```
 
-Contents of JSON file "`sub-01_model-bs_desc-mean_param-polar_dwimap.json`":
+Contents of JSON file "`sub-01_model-ballsticks_desc-mean_param-polar_dwimap.json`":
 
 ```JSON
 {
@@ -647,13 +647,13 @@ Contents of JSON file "`sub-01_model-bs_desc-mean_param-polar_dwimap.json`":
     },
     "OrientationEncoding": {
         "EncodingAxis": 3,
-        "Reference": "bvec",
+        "Reference": "fsl",
         "Type": "unitspherical"
     }
 }
 ```
 
-Contents of JSON file "`sub-01_model-bs_desc-mean_param-vector_dwimap.json`":
+Contents of JSON file "`sub-01_model-ballsticks_desc-mean_param-vector_dwimap.json`":
 
 ```JSON
 {
@@ -673,13 +673,13 @@ Contents of JSON file "`sub-01_model-bs_desc-mean_param-vector_dwimap.json`":
     },
     "OrientationEncoding": {
         "EncodingAxis": 3,
-        "Reference": "bvec",
+        "Reference": "fsl",
         "Type": "unit3vector"
     }
 }
 ```
 
-Contents of JSON file "`sub-01_model-bs_desc-mean_param-vf_dwimap.json`":
+Contents of JSON file "`sub-01_model-ballsticks_desc-mean_param-vf_dwimap.json`":
 
 ```JSON
 {
@@ -703,7 +703,7 @@ Contents of JSON file "`sub-01_model-bs_desc-mean_param-vf_dwimap.json`":
 }
 ```
 
-Contents of JSON file "`sub-01_model-bs_desc-mean_param-vfsum_dwimap.json`":
+Contents of JSON file "`sub-01_model-ballsticks_desc-mean_param-vfsum_dwimap.json`":
 
 ```JSON
 {
@@ -724,7 +724,7 @@ Contents of JSON file "`sub-01_model-bs_desc-mean_param-vfsum_dwimap.json`":
 }
 ```
 
-Contents of JSON file "`sub-01_model-bs_desc-mean_param-diffusivity_dwimap.json`":
+Contents of JSON file "`sub-01_model-ballsticks_desc-mean_param-diffusivity_dwimap.json`":
 
 ```JSON
 {
@@ -746,7 +746,7 @@ Contents of JSON file "`sub-01_model-bs_desc-mean_param-diffusivity_dwimap.json`
 }
 ```
 
-Contents of JSON file "`sub-01_model-bs_desc-mean_param-dstd_dwimap.json`":
+Contents of JSON file "`sub-01_model-ballsticks_desc-mean_param-dstd_dwimap.json`":
 
 ```JSON
 {
@@ -767,7 +767,7 @@ Contents of JSON file "`sub-01_model-bs_desc-mean_param-dstd_dwimap.json`":
     "Units": "TODO"
 }
 
-Contents of JSON file "`sub-01_model-bs_desc-merged_param-polar_dwimap.json`":
+Contents of JSON file "`sub-01_model-ballsticks_desc-merged_param-polar_dwimap.json`":
 
 ```JSON
 {
@@ -788,12 +788,12 @@ Contents of JSON file "`sub-01_model-bs_desc-merged_param-polar_dwimap.json`":
     },
     "OrientationEncoding": {
         "EncodingAxis": 3,
-        "ReferenceAxes": "bvec",
+        "ReferenceAxes": "fsl",
         "Type": "unitspherical"
     }
 }
 
-Contents of JSON file "`sub-01_model-bs_desc-merged_param-vf_dwimap.json`":
+Contents of JSON file "`sub-01_model-ballsticks_desc-merged_param-vf_dwimap.json`":
 
 ```JSON
 {
@@ -838,7 +838,7 @@ Notes:
         and therefore the fact that it encodes a scalar parameter
         can be robustly inferred without reference to metadata information.
 
-    -   In image `"sub-01_model-bs_desc-merged_param-vf_dwimap.json"`,
+    -   In image `"sub-01_model-ballsticks_desc-merged_param-vf_dwimap.json"`,
         there are two extra image dimensions beyond the three spatial dimensions:
         the fourth image axis encodes across the multiple stick components per voxel,
         and the fifth axis encodes realisations across bootstraps.
