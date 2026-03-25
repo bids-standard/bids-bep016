@@ -110,7 +110,7 @@ see [parameter metadata](#parameter-metadata).
 
     This may take one of two forms:
 
-    1.  Value per direction
+    1.  Value per orientation
 
         Each consecutive triplet of image volumes encodes a 3-tuple spherical coordinate,
         using ISO convention for both the order of parameters
@@ -138,7 +138,7 @@ see [parameter metadata](#parameter-metadata).
         with order & convention identical to that above
         (equivalent to spherical coordinate with assumed unity distance from origin).
 
-        Number of image volumes is equal to (2x*N*), where *N* is the maximum
+        Number of image volumes is equal to (2x*N*), where *N* is the *maximum*
         number of discrete orientations in any voxel in the image.
 
 1.  <a name="encoding-3vector">*3-Vectors*</a>:
@@ -161,7 +161,7 @@ see [parameter metadata](#parameter-metadata).
         no quantitative value is associated with each orientation.
 
     Number of image volumes is equal to (3x*N*),
-    where *N* is the maximum number of discrete orientations in any voxel in the image.
+    where *N* is the *maximum* number of discrete orientations in any voxel in the image.
 
 1.  <a name="encoding-tensor">*Tensor*</a>:
 
@@ -198,6 +198,61 @@ see [parameter metadata](#parameter-metadata).
     each voxel are provided;
     these orientations MUST themselves be provided in the associated sidecar JSON file
     (see [parameter metadata](#parameter-metadata)).
+
+### Meta-encoding types
+
+1.  <a name="encoding-fixel">*Fixels*</a>:
+
+    A set of images that together describe a sparse encoding of *fixels*
+    (individual fibre population elements that reside within voxels).
+    Unlike the [spherical coordinates](#encoding-spherical) and [3-vectors](#encoding-3vector) encodings above,
+    where the number of volumes along the fourth image axis
+    must be adequate to support the voxel with the maximal number of unique directions
+    (resulting in sub-optimal storage size given many voxels may contain less than this number),
+    the fixel meta-encoding format facilitates representing a variable number of unique orientations per image voxel.
+
+    The *compulsory* data files are as follows:
+
+    1.  <a name="encoding-fixel-count">*Fixel count*</a>:
+
+        A 3D integer-type image encoding the number of unique fixels in each voxel.
+        The data file name MUST include entity "`_param-count`".
+
+    1.  <a name="encoding-fixel-offset">*Fixel offset*</a>:
+
+        A 3D integer-type image encoding, for each voxel,
+        the offset into the serialised fixel data
+        where data relating to the first fixel in that voxel can be found.
+        The data file name MUST include entity "`_param-offset`".
+
+    1.  <a name="encoding-fixel-orientation">*Fixel orientation*</a>:
+
+        A 2D data file with number of rows equal to the number of unique fixels in the image.
+        Each row encodes the orientation of each individual fixel.
+        These orientations must be encoded
+        ---*without* any associated value per fixel (ie. unit orientations)---
+        as either [spherical coordinates](#encoding-spherical) or [3-vectors](#encoding-3vector).
+        The data file name MUST include entity "`_param-direction`".
+
+    Additional *optional* data files include:
+
+    1.  <a name="encoding-fixel-directionmask">*Fixel direction masks*</a>:
+
+        A binary 2D data file of shape `(F, D)`,
+        where *F* is the number of unique fixels in the image,
+        and *D* is the number of orientations in which a function on the sphere was sampled
+        in order to perform the segmentation that produced those fixels.
+        Each row encodes the set of directions that contributed to the formation of that particular fixel.
+        The set of orientations corresponding to the columns of the data file
+        MUST be provided in the associated sidecar JSON file
+        (see [parameter metadata](#parameter-metadata)).
+        The data file name MUST exclude entity "`_param-`" and use suffix "`_mask`".
+
+    1.  <a name="encoding-fixel-data">*Fixel-wise data*</a>:
+
+        Data files encoding any arbitrary fixel-wise parameter of interest.
+        Each data file can be either 1D or 2D.
+        the number of rows must correspond to the number of unique fixels in the image.
 
 ### Bootstrap encoding
 
@@ -283,17 +338,17 @@ Some fields are relevant only to specific [orientation encoding types](#orientat
 
 Dictionary `"OrientationEncoding"` has the following reserved keywords:
 
-| **Key name**            | Relevant [orientation encoding types](#orientation-encoding-types)                                                                                                         | **Description**                                                                                                                                                                                                                                                                                                                                                                                                              |
-| ----------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| AmplitudesDirections    | [Amplitudes](#encoding-amp)                                                                                                                                                | REQUIRED for `"Type": "amplitudes"`; MUST NOT be specified otherwise. List of lists of floats. Data are either [spherical coordinates (directions only)](#encoding-spherical) or [3-vectors](#encoding-3vector) with unit norm. Defines the dense directional basis set on which samples of a spherical function within each voxel are provided. The length of the list must be equal to the number of volumes in the image. |
-| AntipodalSymmetry       | [spherical coordinates](#encoding-spherical), [3-vectors](#encoding-3vector), [tensor](#encoding-tensor), [amplitudes](#encoding-amp), [spherical harmonics](#encoding-sh) | OPTIONAL. Boolean. Indicates whether orientation information should be interpreted as being antipodally symmetric. Assumed to be True if omitted.                                                                                                                                                                                                                                                                            |
-| EncodingAxis            | All except [scalar](#encoding-scalar)                                                                                                                                      | REQUIRED. Integer. Indicates the image axis (indexed from zero) along which image intensities should be interpreted as corresponding to orientation encoding.                                                                                                                                                                                                                                                                |
-| FillValue               | [Scalar](#encoding-scalar), [spherical coordinates](#encoding-spherical), [3-vectors](#encoding-3vector)                                                                   | OPTIONAL. Float; allowed values: { 0.0, NaN }. Value stored in image when the number of discrete orientations in a given voxel is fewer than the maximal number for that image.                                                                                                                                                                                                                                              |
-| Reference               | All except [scalar](#encoding-scalar)                                                                                                                                      | REQUIRED. String; allowed values: { `fsl`, `ijk`, `xyz` }. Defines the reference coordinate system against which orientation information is encoded (more below).                                                                                                                                                                                                                                                           |
-| SphericalHarmonicBasis  | [Spherical harmonics](#encoding-sh)                                                                                                                                        | REQUIRED for `"Type": "sh"`; MUST NOT be specified otherwise. String. Options are: { `mrtrix3`, `descoteaux` }. Details are provided in the [appendix on Spherical Harmonics](../../appendices/spherical-harmonics.md#bases).                                                                                                                                                                                                |
-| SphericalHarmonicOrder  | [Spherical harmonics](#encoding-sh)                                                                                                                                        | OPTIONAL for `"Type": "sh"`; MUST NOT be specified otherwise. Integer. The maximal spherical harmonic order *l<sub>max</sub>*; the number of volumes in the associated NIfTI image must correspond to this value as per the relationship described in the [appendix on Spherical Harmonics](../../appendices/spherical-harmonics.md#sh-serialization-and-deserialization).                                                   |
-| TensorRank              | [Tensor](#encoding-tensor)                                                                                                                                                 | REQUIRED for `"Type": "tensor"; MUST NOT be specified otherwise. Integer. Rank of tensor reporesentation. Specification currently only supports a value of 2.                                                                                                                                                                                                                                                                |
-| Type                    | Any                                                                                                                                                                        | REQUIRED. String. Specifies the type of orientation information (if any) encoded in the NIfTI image. Permitted values: { `scalar`, `dec`, `unitspherical`, `spherical`, `unit3vector`, `3vector`, `tensor`, `sh`, `amplitudes` }.                                                                                                                                                                                            |
+| **Key name**            | Relevant [orientation encoding types](#orientation-encoding-types)                                                                                                         | **Description**                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+| ----------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| AntipodalSymmetry       | [spherical coordinates](#encoding-spherical), [3-vectors](#encoding-3vector), [tensor](#encoding-tensor), [amplitudes](#encoding-amp), [spherical harmonics](#encoding-sh) | OPTIONAL. Boolean. Indicates whether orientation information should be interpreted as being antipodally symmetric. Assumed to be True if omitted.                                                                                                                                                                                                                                                                                                               |
+| DirectionSet            | [Amplitudes](#encoding-amp), [fixel masks](#encoding-fixel-mask)                                                                                                           | REQUIRED for `"Type": "amplitudes"` and fixel direction masks; MUST NOT be specified otherwise. List of lists of floats. Data are either [spherical coordinates (directions only)](#encoding-spherical) or [3-vectors](#encoding-3vector) with unit norm. Defines the dense directional basis set on which samples of a spherical function have been taken. The length of the list must be equal to the number of elements along the orientation encoding axis. |
+| EncodingAxis            | All except [scalar](#encoding-scalar)                                                                                                                                      | REQUIRED. Integer. Indicates the image axis (indexed from zero) along which image intensities should be interpreted as corresponding to orientation encoding.                                                                                                                                                                                                                                                                                                   |
+| FillValue               | [Scalar](#encoding-scalar), [spherical coordinates](#encoding-spherical), [3-vectors](#encoding-3vector)                                                                   | OPTIONAL. Float; allowed values: { 0.0, NaN }. Value stored in image when the number of discrete orientations in a given voxel is fewer than the maximal number for that image.                                                                                                                                                                                                                                                                                 |
+| Reference               | All except [scalar](#encoding-scalar)                                                                                                                                      | REQUIRED. String; allowed values: { `fsl`, `ijk`, `xyz` }. Defines the reference coordinate system against which orientation information is encoded (more below).                                                                                                                                                                                                                                                                                               |
+| SphericalHarmonicBasis  | [Spherical harmonics](#encoding-sh)                                                                                                                                        | REQUIRED for `"Type": "sh"`; MUST NOT be specified otherwise. String. Options are: { `mrtrix3`, `descoteaux` }. Details are provided in the [appendix on Spherical Harmonics](../../appendices/spherical-harmonics.md#bases).                                                                                                                                                                                                                                   |
+| SphericalHarmonicOrder  | [Spherical harmonics](#encoding-sh)                                                                                                                                        | OPTIONAL for `"Type": "sh"`; MUST NOT be specified otherwise. Integer. The maximal spherical harmonic order *l<sub>max</sub>*; the number of volumes in the associated NIfTI image must correspond to this value as per the relationship described in the [appendix on Spherical Harmonics](../../appendices/spherical-harmonics.md#sh-serialization-and-deserialization).                                                                                      |
+| TensorRank              | [Tensor](#encoding-tensor)                                                                                                                                                 | REQUIRED for `"Type": "tensor"`; MUST NOT be specified otherwise. Integer. Rank of tensor reporesentation. Specification currently only supports a value of 2.                                                                                                                                                                                                                                                                                                  |
+| Type                    | Any                                                                                                                                                                        | REQUIRED. String. Specifies the type of orientation information (if any) encoded in the NIfTI image. Permitted values: { `scalar`, `dec`, `unitspherical`, `spherical`, `unit3vector`, `3vector`, `tensor`, `sh`, `amplitudes` }.                                                                                                                                                                                                                               |
 
 Field `"OrientationEncoding"["Reference"]` MUST contain one of the following values:
 
@@ -874,3 +929,123 @@ Notes:
         It is however RECOMMENDED to encode this information in separate files,
         given that in the more general case there may be multiple scalar parameters
         individually attributed to each component.
+
+#### A fixel data meta-encoding
+
+<!-- This block generates a file tree.
+A guide for using macros can be found at
+ https://github.com/bids-standard/bids-specification/blob/master/macros_doc.md
+-->
+{{ MACROS___make_filetree_example(
+    {
+    "fixel_pipeline": {
+        "sub-01": {
+        "dwi": {
+            "sub-01_model-fixel_param-count_dwimap.nii.gz": "",
+            "sub-01_model-fixel_param-count_dwimap.json": "",
+            "sub-01_model-fixel_param-offset_dwimap.nii.gz": "",
+            "sub-01_model-fixel_param-offset_dwimap.json": "",
+            "sub-01_model-fixel_param-direction_dwimap.npy": "",
+            "sub-01_model-fixel_param-direction_dwimap.json": "",
+            "sub-01_model-fixel_mask.npy": "",
+            "sub-01_model-fixel_mask.json": "",
+            "sub-01_model-fixel_param-afd_dwimap.npy": "",
+            "sub-01_model-fixel_param-afd_dwimap.json": "",
+        },
+        },
+    },
+    }
+) }}
+
+Dimensions of NIfTI image "`sub-01_model-fixel_param-count_dwimap.nii.gz`": *I*x*J*x*K* ([scalar](#encoding-scalar))
+Dimensions of NIfTI image "`sub-01_model-fixel_param-offset_dwimap.nii.gz`": *I*x*J*x*K* ([scalar](#encoding-scalar))
+Shape of NPY file "`sub-01_model-fixel_param-direction_dwimap.npy`": (*F*, 3) ([3-vectors](#encoding-3vectors), unit norm; *F* total number of fixels in image)
+Shape of NPY file "`sub-01_model-fixel_mask.npy`": (*F*, *D*) ([scalar](#encoding-scalar), binary data type; *F* total number of fixels in image; *D* total number of direction samples during fixel segmentation)
+Shape of NPY file "`sub-01_model-fixel_param-afd_dwimap.npy`": (*F*) ([scalar](#encoding-scalar)*F* total number of fixels in image)
+
+Contents of JSON file "`sub-01_model-fixel_param-count_dwimap.json`":
+
+```JSON
+{
+    "Description": "Number of unique fixels present in each image voxel",
+    "Model": {
+        "Description": "Multi-Shell Multi-Tissue (MSMT) Constrained Spherical Deconvolution (CSD)",
+        "URL": "https://mrtrix.readthedocs.io/en/latest/constrained_spherical_deconvolution/multi_shell_multi_tissue_csd.html",
+    },
+    "OrientationEncoding": {
+        "Type": "scalar"
+    }
+}
+```
+
+Contents of JSON file "`sub-01_model-fixel_param-offset_dwimap.json`":
+
+```JSON
+{
+    "Description": "Offset into serialised fixel data for first fixel in each voxel",
+    "Model": {
+        "Description": "Multi-Shell Multi-Tissue (MSMT) Constrained Spherical Deconvolution (CSD)",
+        "URL": "https://mrtrix.readthedocs.io/en/latest/constrained_spherical_deconvolution/multi_shell_multi_tissue_csd.html",
+    },
+    "OrientationEncoding": {
+        "Type": "scalar"
+    }
+}
+```
+
+Contents of JSON file "`sub-01_model-fixel_param-direction_dwimap.json`":
+
+```JSON
+{
+    "Description": "Orientation of each fixel",
+    "Model": {
+        "Description": "Multi-Shell Multi-Tissue (MSMT) Constrained Spherical Deconvolution (CSD)",
+        "URL": "https://mrtrix.readthedocs.io/en/latest/constrained_spherical_deconvolution/multi_shell_multi_tissue_csd.html",
+    },
+    "OrientationEncoding": {
+        "EncodingAxis": 1,
+        "Reference": "xyz",
+        "Type": "unit3vector"
+    }
+}
+```
+
+Contents of JSON file "`sub-01_model-fixel_mask.json`":
+
+```JSON
+{
+    "Description": "Mask of orientation samples that contributed to the formation of each fixel",
+    "Model": {
+        "Description": "Multi-Shell Multi-Tissue (MSMT) Constrained Spherical Deconvolution (CSD)",
+        "URL": "https://mrtrix.readthedocs.io/en/latest/constrained_spherical_deconvolution/multi_shell_multi_tissue_csd.html",
+    },
+    "OrientationEncoding": {
+        "DirectionSet": [
+            [0.55357, 1.57080],
+            [2.58802, 1.57080],
+            [0.00000, 0.55357],
+            ...
+            [-1.69378, 0.34339],
+            [-1.57080, 0.41257],
+            [-1.44781, 0.34339]
+        ],
+        "Type": "scalar"
+    }
+}
+```
+
+Contents of JSON file "`sub-01_model-fixel_param-afd_dwimap.json`":
+
+```JSON
+{
+    "Description": "Fixel-wise Apparent Fibre Density (AFD)",
+    "Model": {
+        "Description": "Multi-Shell Multi-Tissue (MSMT) Constrained Spherical Deconvolution (CSD)",
+        "URL": "https://mrtrix.readthedocs.io/en/latest/constrained_spherical_deconvolution/multi_shell_multi_tissue_csd.html",
+    },
+    "OrientationEncoding": {
+        "Type": "scalar"
+    },
+    "ParameterURL": "http://www.sciencedirect.com/science/article/pii/S1053811916304943"
+}
+```
