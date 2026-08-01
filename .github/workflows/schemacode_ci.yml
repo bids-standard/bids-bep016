@@ -42,7 +42,7 @@ jobs:
         env:
           BIDSSCHEMATOOLS_RELEASE: 1
         if: ${{ startsWith(github.ref, 'refs/tags/schema-') }}
-      - uses: hynek/build-and-inspect-python-package@v2
+      - uses: hynek/build-and-inspect-python-package@v2.18.0
         with:
           path: tools/schemacode
           attest-build-provenance-github: ${{ github.event_name != 'pull_request' }}
