@@ -13,7 +13,7 @@ jobs:
     github_changelog_generator:
         runs-on: ubuntu-latest
         steps:
-        - uses: actions/checkout@v6
+        - uses: actions/checkout@v7
         - name: Set up Ruby
           uses: ruby/setup-ruby@v1
           with:
@@ -62,14 +62,14 @@ jobs:
         needs: github_changelog_generator
         runs-on: ubuntu-latest
         steps:
-        - uses: actions/checkout@v6
+        - uses: actions/checkout@v7
         - name: Download previously build changelog
           uses: actions/download-artifact@v8
           with:
             name: changelog_pre_lint
             path: ~/changelog_build
         - name: Set up Node
-          uses: actions/setup-node@v6
+          uses: actions/setup-node@v7
           with:
             node-version: 20
         - name: Install remark and extensions
@@ -108,7 +108,7 @@ jobs:
         if: contains(github.event.head_commit.message, '[build changelog]')
         runs-on: ubuntu-latest
         steps:
-        - uses: actions/checkout@v6
+        - uses: actions/checkout@v7
         - name: Download previously build changelog
           uses: actions/download-artifact@v8
           with:
